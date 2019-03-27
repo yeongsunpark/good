@@ -14,15 +14,13 @@ result['data'] = list()
 passage_list = list()
 
 number = 1
+l = []
 with open("cw18/20180406_gen4.txt", "r") as f:
     # title content 질문번호    질문  유사질문    답변  기사일자    원본  답시작 답끝
-    para_dict = dict()
-    # para_dict = list()
     for line in f:
         item = line.strip().split("\t")
         if len(item) == 10:
-            # result['data'].append(para_dict)
-            # new paragraph
+
             para_dict = dict()
             para_dict['qas'] = list()
 
@@ -48,7 +46,11 @@ with open("cw18/20180406_gen4.txt", "r") as f:
             para_dict['qas'].append(qas_dict)
             para_dict['title'] = title
             para_dict['context'] = context_ori
-        result['data'].append(para_dict)
+            l.append((id, context_ori))
+        if context_ori in l:
+            result[]
+        else:
+            result['data'].append(para_dict)
 
 f = open("didi.json", "w")
 json.dump(result, f, ensure_ascii=False, indent=2)
