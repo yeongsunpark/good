@@ -12,6 +12,7 @@ from multiprocessing import Pool
 import pymysql
 
 sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.abspath('..'))
 import custom_logger
 from morp_analyze_my import NLPAnalyzer
 
@@ -29,7 +30,7 @@ class SquadDb():
     def __init__(self):
 
         self.is_divide = False  # for squad2db, db2squad
-        self.context_table = "(%s, %s, %s, %s, %s)"
+        self.context_table = "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         self.qna_table = "(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         self.con = None
         self.cur = None
@@ -62,10 +63,10 @@ class SquadDb():
 
     def insert_data(self, table, value_part, var_tuple, morph_end):
         if "context" in table:
-            sql = "INSERT INTO {}(id, season, data_type, title, context{}) VALUES {}".\
+            sql = "INSERT INTO {}(id, season, data_type, title, context{}, source, doc_type, sub_doc_type, fileName, seq) VALUES {}".\
                 format(table, morph_end, value_part)
         else:
-            sql = "INSERT INTO {}(c_id, q_id, question{}, answer_start{}, answer_end{}, answer{}, cate1, cate2, cate3) VALUES {}".\
+            sql = "INSERT INTO {}(c_id, q_id, question{}, answer_start{}, answer_end{}, answer{}, numType, classType, isFlexible) VALUES {}".\
                 format(table, morph_end, morph_end, morph_end, morph_end, value_part)
         self.insert_mysql(sql, var_tuple)
 
@@ -78,36 +79,34 @@ class SquadDb():
             start_id = 1
         for d in data:
             try:
-                logger.info(d['title'])
-                title = d['title']
-            except KeyError:
-                continue
-            for para in d['paragraphs']:
-                q_context = str(para['context'])
-                try:
-                    self.context_ori = str(para['context_ori'])
-                except KeyError:
-                    if self.context_ori == "":
-                        exit("There's no context_ori")
-                var_tuple_ctx = (start_id, season, data_type, title.strip(), q_context.strip())
-                var_tuple_ctx_ori = (start_id, season, data_type, title.strip(), self.context_ori.strip())
+                logger.info(d['fileName']) #
+                title = d['fileName']
+                fileName = d['fileName']
+                sub_doc_type = d['sub_doc_type']
+                seq = d['seq']
+                doc_type = d['doc_type']
+                source = d['source']
+                q_context = d['text']
+                logger.info("q_context")
+                var_tuple_ctx = (start_id, season, data_type, str(title).strip(), q_context.strip(), source, doc_type, sub_doc_type, fileName, seq)
                 self.insert_data(table="all_context", value_part=self.context_table, var_tuple=var_tuple_ctx, morph_end="")
-                self.insert_data(table="all_context_ori", value_part=self.context_table, var_tuple=var_tuple_ctx_ori, morph_end="")
-                for qa in para['qas']:
-                    q = str(qa['question'])
-                    q_id = qa['id']
-                    for a in qa['answers']:
-                        a_start = a['answer_start']   # int
-                        try:
-                            a_end = a['answer_end']   # int
-                        except KeyError:
-                            a_end = -1
-                        text = a['text']  # answer text
-                        var_tuple_qa = (start_id, q_id, q.strip().strip("?").strip(), a_start, a_end, text.strip(),
-                                        '', '', '')
-                    self.insert_data(table="all_qna", value_part=self.qna_table, var_tuple=var_tuple_qa, morph_end="")
-                start_id += 1
-            logger.debug("num of para: %i" % len(d['paragraphs']))
+            except KeyError:
+                exit("something wrong")
+
+            # for qa in zip (d['main_qa_list']):
+            for qa, i in zip (d['main_qa_list'], range(len(d['main_qa_list']))):
+                answer = qa['answer']
+                begin = qa['begin']
+                q = str(qa['question'])
+                isf = qa['isFlexible']
+                end = qa['end']
+                numType = qa['type']
+                classType = qa['classType']
+                var_tuple_qa = (start_id, i+1, q.strip(), begin, end, answer.strip(),
+                                numType, classType, isf)
+                self.insert_data(table="all_qna", value_part=self.qna_table, var_tuple=var_tuple_qa, morph_end="")
+            start_id += 1
+        # logger.debug("num of para: %i" % len(d['paragraphs']))
 
 re_quotation = re.compile(r"\[+[\"\'](\[\[.+\]\])[\"\']\]+")
 

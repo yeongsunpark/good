@@ -32,9 +32,6 @@ class SquadDb():
         self.is_divide = False  # for squad2db, db2squad
         self.is_dp = False
         self.db_cnf_dict = {}
-        # self.context_table = "(%s, %s, %s, %s, %s, %s)"
-        self.context_table = "(%s, %s, %s, %s, %s)"
-        self.qna_table = "(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         self.con = None
         self.cur = None
         self.dp_end = "_dp" if self.is_dp else ""
@@ -186,13 +183,12 @@ class SquadDb():
         return new_ptp
 
     def process_qa(self, type, season, table_name):
-        db_cnf_dict = {"host": 'localhost', "usr": "root", "pwd": "data~secret!", "db": table_name, "encoding": "utf8"}
         self.connect_db(table_name)
         if type == "context":
             # process only data created at certain season
             fetch_sql = "select c_id, q_id, question, answer, answer_start, context from all_qna q, all_context c " \
-                        "where q.q_id LIKE '%-1' AND q.q_id LIKE '{}_%' AND q.c_id = c.id AND question_morph is NULL and c.id> 0 " \
-                        "ORDER BY CAST(c_id AS UNSIGNED), q_id;".format(season)
+                        "where q.c_id = c.id AND question_morph is NULL and c.id> 0 " \
+                        "ORDER BY CAST(c_id AS UNSIGNED), q_id;"
         else:
             logger.error("You select the wrong type({}). Please re-check your command".format(type))
             exit()

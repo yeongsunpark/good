@@ -72,7 +72,7 @@ class SquadDb():
         workers = 30
         r = 300
         fetch_sql = "SELECT c_id, q_id, question_morph, answer_morph, answer_start_morph, answer_end_morph, c.context_morph " \
-                    "FROM all_context_all c, all_qna q WHERE c.id=q.c_id AND q.q_id LIKE '{}_%-1' " \
+                    "FROM all_context_all c, all_qna q WHERE c.id=q.c_id " \
                     "ORDER BY cast(c_id as unsigned), q_id;".format(season)
         self.cur.execute(fetch_sql)
         qas = self.cur.fetchall()
@@ -111,7 +111,7 @@ def check_index(qas, n, r):
             # c_id, q_id, 본문에서 답변의 위치 뽑은 것, 제대로된 답변(버티컬 바 안의 답변)
             # q[4]는 answer_start_morph 고 q[5]는 answer_end_morph 다.
     if len(return_list) != 0:
-        with open("check/re_patch_{}.txt".format(n), "a") as f:
+        with open("/home/msl/ys/cute/nia/check/re_patch_{}.txt".format(n), "a") as f:
             f.write("\n".join(return_list))
             f.write("\n")
 

@@ -181,7 +181,7 @@ class SquadDb():
         db_cnf_dict = {"host": 'localhost', "usr": "root", "pwd": "data~secret!", "db": table_name, "encoding": "utf8"}
         self.connect_db(table_name)
         if type == "re_patch":
-            with open("check/re_patch_all.txt") as f:  # 바꿔줌
+            with open("/home/msl/ys/cute/nia/check/re_patch_all.txt") as f:  # 바꿔줌
                 qas = f.readlines()
         else:
             logger.error("You select the wrong type({}). Please re-check your command".format(type))
@@ -246,14 +246,6 @@ if __name__ == "__main__":
     j = SquadDb()
     j.connect_db(db_table)
 
-    if mode == "squad2db":
-        j.squad2db(json_input, int(start_id), season, data_type, db_table)
-    elif mode == "context":
-        j.process_qa('context', season, db_table)
-    elif mode == "q_only":
-        j.process_qa('q_only', season, db_table)
-    elif mode == "check_data":
-        j.check_data(season)
-    elif mode == "re_patch":
+    if mode == "re_patch":
         j.process_qa('re_patch', season, db_table)
     logger.info("All finished")
