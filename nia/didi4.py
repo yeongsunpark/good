@@ -11,7 +11,7 @@ result['data'] = list()
 passage_list = list()
 number = 1
 l = []
-with open("cw18/20180406_gen4.txt", "r") as f:
+with open("cw18_only.txt", "r") as f:
     # title content 질문번호 질문 유사질문 답변 기사일자 원본 답시작 답끝
     for line in f:
         item = line.strip().split("\t")
@@ -46,5 +46,5 @@ with open("cw18/20180406_gen4.txt", "r") as f:
                         p['qas'].append(qas_dict)
             #except:
             #    print(context_ori)
-f = open("didi.json", "w")
+f = open("didi4.json", "w")
 json.dump(result, f, ensure_ascii=False, indent=2)
