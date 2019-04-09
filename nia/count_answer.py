@@ -46,62 +46,22 @@ for f1 in os.listdir("/home/msl/ys/cute/nia/yes_marker"):
                 # print (content)
                 answer = item[4].replace("\n", "")
             else:
-                print(line)
+                # print(line)
                 break
 
             m_answer = "|" * 5 + answer + "|" * 5
             a = content.count(m_answer)  # 컨텐츠에서 m_answer 가 몇 개 있는지 찾을 건데
 
-            if a != 1:  # 일이 아니면 ㅋㅋㅋ 오류야!!!
-                print (line)
-
-                f2_list.append([t, str(num), item[2], item[3], answer, l, str(a)])
-                # f2.write("\t".join([t, str(num), item[2], item[3], item[4], l, str(a)]))
-                # f2.write("\n")
-                with open(
-                        os.path.join("/home/msl/ys/cute/nia/yes_marker/", "본문표시_error_{}.tsv".format(creator)),
-                        'w', encoding='utf8') as f2:
-                    for fl in f2_list:
-                        f2.write("\t".join(fl))
-                        f2.write("\n")
+            # f3_list.append([t, str(num), item[2], item[3], answer, l, str(a)])
+            f3_list.append([str(num), item[0], item[1], item[2], item[3], answer, str(a)])
+            # f2.write("\t".join([t, str(num), item[2], item[3], item[4], l, str(a)]))
+            # f2.write("\n")
+            num += 1
+        with open(
+                os.path.join("/home/msl/ys/cute/nia/yes_marker/", "본문표시_error_{}.tsv".format(creator)),
+                'w', encoding='utf8') as f2:
+            for fl in f3_list:
+                f2.write("\t".join(fl))
+                f2.write("\n")
 
                 # break
-
-            elif a == 1:
-                try:
-                    a_location = content.index("{}{}{}".format("|" * 5, answer, "|" * 5))
-                    markers = list()
-                    for m in ["|"]:
-                        markers += [match.start() for match in re.finditer(re.escape(m * 5), content)]
-                    a_location -= len([x for x in markers if x < a_location]) * 5
-                    a_para_strip = content
-                    for m in ["|"]:
-                        a_para_strip = a_para_strip.replace(m * 5, "")
-                    new_answer = a_para_strip[a_location:a_location + len(answer)]
-                    try:
-                        assert (answer == new_answer)
-                    except AssertionError:
-                        print ("no match")
-                        print (line)
-                        exit()
-                except ValueError as e:
-                    print (line)
-                    exit()
-
-                b = a_location
-                m_context = content.replace("|" * 5, "")
-                m_context = m_context[:b] + "|" * 5 + answer + "|" * 5 + m_context[b + len(answer):]
-                f3_list.append(
-                    [t, m_context, str(num), item[3], answer, "", "", l.replace("|" * 5, ""), str(b),
-                     str(b + len(answer))])  # common_tsv 를 위해 수정
-                with open(
-                        os.path.join("/home/msl/ys/cute/nia/yes_marker/", "본문표시_normal_{}.tsv".format(creator)),
-                        'w', encoding='utf8') as f3:
-                    for fl in f3_list:
-                        f3.write("\t".join(fl))
-                        f3.write("\n")
-            else:
-                print(line)
-                break
-            num += 1
-
