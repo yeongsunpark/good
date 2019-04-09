@@ -70,7 +70,7 @@ class SquadDb():
                 format(table, morph_end, morph_end, morph_end, morph_end, value_part)
         self.insert_mysql(sql, var_tuple)
 
-    def squad2db(self, json_location, start_id, season, data_type, table_name):
+    def squad2db(self, json_location, start_id, season, data_type, table_name, q_id_index):
         self.connect_db(table_name)
         with open(json_location) as f:
             data = json.load(f)
@@ -79,8 +79,8 @@ class SquadDb():
             start_id = 1
         for d in data:
             try:
-                logger.info(d['fileName']) #
-                title = d['fileName']
+                logger.info(d['fileName'])
+                title = d['seq']
                 fileName = d['fileName']
                 sub_doc_type = d['sub_doc_type']
                 seq = d['seq']
@@ -102,9 +102,11 @@ class SquadDb():
                 end = qa['end']
                 numType = qa['type']
                 classType = qa['classType']
-                var_tuple_qa = (start_id, i+1, q.strip(), begin, end, answer.strip(),
-                                numType, classType, isf)
+                q_id = "cw19" + "_" + str(q_id_index)
+                var_tuple_qa = (start_id, q_id, q.strip(), begin, end, answer.strip(),
+                                numType, classType, isf) # q_id 를 i+1 로 표현해서 본문 시작할 때마다 1로 했다가 바꿈!
                 self.insert_data(table="all_qna", value_part=self.qna_table, var_tuple=var_tuple_qa, morph_end="")
+                q_id_index +=1
             start_id += 1
         # logger.debug("num of para: %i" % len(d['paragraphs']))
 
@@ -120,11 +122,12 @@ if __name__ == "__main__":
         json_input = sys.argv[4]
         start_id = sys.argv[5]
         data_type = sys.argv[6]
+        q_id_index = 1
     except: print("")
 
     j = SquadDb()
     j.connect_db(db_table)
 
     if mode == "squad2db":
-        j.squad2db(json_input, int(start_id), season, data_type, db_table)
+        j.squad2db(json_input, int(start_id), season, data_type, db_table, q_id_index)
     logger.info("All finished")
