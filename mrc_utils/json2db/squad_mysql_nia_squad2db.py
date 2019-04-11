@@ -116,13 +116,22 @@ re_quotation = re.compile(r"\[+[\"\'](\[\[.+\]\])[\"\']\]+")
 if __name__ == "__main__":
 
     try:
+        """
         mode = sys.argv[1]
         season = sys.argv[2]
         db_table = sys.argv[3]
         json_input = sys.argv[4]
-        start_id = sys.argv[5]
-        data_type = sys.argv[6]
-        q_id_index = 1
+        start_id = sys.argv[5] # 1
+        data_type = sys.argv[6] # news
+        q_id_index = sys.argv[7] # 수정하기! (1)
+        """
+        mode = "squad2db"
+        season = "1"
+        db_table = "SQUAD_NEWS_NIA"
+        json_input = "/home/msl/ys/cute/nia/smooth/new_normal_finish_sum.json"
+        start_id = 1  # 1
+        data_type = "news"  # news
+        q_id_index = 1  # 수정하기! (1)
     except: print("")
 
     j = SquadDb()
