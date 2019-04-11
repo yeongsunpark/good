@@ -20,6 +20,7 @@ def find_index(a_para, answer):
             assert (answer == new_answer)
         except AssertionError:
             print ("assertionError")
+            print(a_para + "\n" + answer)
             exit()
     except ValueError as e:
         print (a_para+"\n"+answer)
