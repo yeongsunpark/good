@@ -41,17 +41,17 @@ class SquadDb():
             row2 = self.cur.fetchall()
             mini = int(min(row2)[0])
             maxi = int(max(row2)[0])
-            sql3 = "select * from all_qna where abs(c_id) >= abs(%d) and abs(c_id) <= abs(%d)" % (mini, maxi)
+            sql3 = "select * from all_qna where c_id = %d or c_id = %d" % (mini, maxi)
             self.cur.execute(sql3)
             print (self.cur.execute(sql3))
             row3 = self.cur.fetchall()
             for r3 in row3:
                 a.append([r3[0], r3[1], r3[2]])
             a.append("\n")
-        # f = open ("/home/msl/ys/cute/nia/smooth/delete33.txt", "w")
-        # for aa in a:
-            # f.write("\t".join(aa))
-            # f.write("\n")
+        f = open ("/home/msl/ys/cute/nia/smooth/delete33.txt", "w")
+        for aa in a:
+            f.write("\t".join(aa))
+            f.write("\n")
 
 
 
