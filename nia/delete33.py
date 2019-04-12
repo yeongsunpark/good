@@ -31,9 +31,29 @@ class SquadDb():
             print ("Finish connecting to database...")
 
     def work(self):
-        sql = "SELECT * FROM all_context GROUP BY seq HAVING COUNT(seq) > 1"
+        a = list()
+        sql = "SELECT seq FROM all_context GROUP BY seq HAVING COUNT(seq) > 1"
         self.cur.execute(sql)
         row = self.cur.fetchall()
+        for r in row:
+            sql2 = "select id from all_context where seq = %d" % r
+            self.cur.execute(sql2)
+            row2 = self.cur.fetchall()
+            mini = int(min(row2)[0])
+            maxi = int(max(row2)[0])
+            sql3 = "select * from all_qna where abs(c_id) >= abs(%d) and abs(c_id) <= abs(%d)" % (mini, maxi)
+            self.cur.execute(sql3)
+            print (self.cur.execute(sql3))
+            row3 = self.cur.fetchall()
+            for r3 in row3:
+                a.append([r3[0], r3[1], r3[2]])
+            a.append("\n")
+        # f = open ("/home/msl/ys/cute/nia/smooth/delete33.txt", "w")
+        # for aa in a:
+            # f.write("\t".join(aa))
+            # f.write("\n")
+
+
 
 if __name__ == "__main__":
 
