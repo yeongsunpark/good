@@ -87,9 +87,14 @@ class SquadDb():
                 doc_type = d['doc_type']
                 source = d['source']
                 q_context = d['text']
-                logger.info("q_context")
-                var_tuple_ctx = (start_id, season, data_type, str(title).strip(), q_context.strip(), source, doc_type, sub_doc_type, fileName, seq)
+                # logger.info(q_context)
+
+                ### var_tuple_ctx = (start_id, season, data_type, str(title).strip(), q_context.strip(), source, doc_type, sub_doc_type, fileName, seq)
+                var_tuple_ctx = (start_id, season, data_type, str(title).strip(), q_context, source, doc_type, sub_doc_type, fileName, seq)
+
+                # var_tuple_ctx_ori = (start_id, season, data_type, title.strip(), self.context_ori.strip())
                 self.insert_data(table="all_context", value_part=self.context_table, var_tuple=var_tuple_ctx, morph_end="")
+                # self.insert_data(table="all_context_ori", value_part=self.context_table, var_tuple=var_tuple_ctx_ori, morph_end="")
             except KeyError:
                 exit("something wrong")
 
@@ -102,9 +107,9 @@ class SquadDb():
                 end = qa['end']
                 numType = qa['type']
                 classType = qa['classType']
-                q_id = "cw19" + "_" + str(q_id_index)
-                var_tuple_qa = (start_id, q_id, q.strip(), begin, end, answer.strip(),
-                                numType, classType, isf) # q_id 를 i+1 로 표현해서 본문 시작할 때마다 1로 했다가 바꿈!
+                q_id = creator + "_" + str(q_id_index) + "-1"
+                ### var_tuple_qa = (start_id, q_id, q.strip(), begin, end, answer.strip(), numType, classType, isf) # q_id 를 i+1 로 표현해서 본문 시작할 때마다 1로 했다가 바꿈!
+                var_tuple_qa = (start_id, q_id, q.strip(), begin, end, answer, numType, classType, isf) # q_id 를 i+1 로 표현해서 본문 시작할 때마다 1로 했다가 바꿈!
                 self.insert_data(table="all_qna", value_part=self.qna_table, var_tuple=var_tuple_qa, morph_end="")
                 q_id_index +=1
             start_id += 1
@@ -126,12 +131,14 @@ if __name__ == "__main__":
         q_id_index = sys.argv[7] # 수정하기! (1)
         """
         mode = "squad2db"
-        season = "1"
+        season = "2"  # 수정하기!
         db_table = "SQUAD_NEWS_NIA"
-        json_input = "/home/msl/ys/cute/nia/smooth/new_normal_finish_sum.json"
-        start_id = 1  # 1
+        json_input = "/home/msl/ys/cute/nia/yes_marker/checker410.json"
+        start_id = 5607  # 수정하기! 1(context_id)
         data_type = "news"  # news
-        q_id_index = 1  # 수정하기! (1)
+        creator = "m2"
+        q_id_index = 28372  # 수정하기! (1)(q_id)
+        #  select max(abs(substring_index(substring_index(q_id, "_",-1), "-",1))) from all_qna; 이거에 +1 하기!
     except: print("")
 
     j = SquadDb()

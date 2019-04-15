@@ -16,12 +16,12 @@ wh_dict = {"work_who":0, "work_when":1, "work_where":2, "work_what":3, "work_how
 
 l = []
 i = 1  # 수정
-# with open("new_normal_finish-sum2.txt", "r") as f:
-with open(sys.argv[1], "r") as f:
+# with open(sys.argv[1], "r") as f:
+with open("/home/msl/ys/cute/nia/smooth/new_normal_finish-sum3.txt", "r") as f:
     # TITLE context 질문번호    질문    답변    카테고리    육하원칙    원본    답 시작위치 답 끝위치
     for line in f:
         item = line.strip().split("\t")
-
+        print (len(item))
         if len(item) == 10:
             para_dict = dict()
             para_dict['main_qa_list'] = list()
@@ -32,6 +32,8 @@ with open(sys.argv[1], "r") as f:
             q_1 = item[3]
             answer = item[4]
             wh = item[6]
+            if wh == "":
+                break
             answer_s = item[8]
             answer_e = item[9]
             qas_dict = dict()
@@ -60,13 +62,13 @@ with open(sys.argv[1], "r") as f:
                 for p in result['data']:
                     if p['text'] == context_ori:
                         p['main_qa_list'].append(qas_dict)
-
         else:
             print (line)
             break
             #except:
             #    print(context_ori)
-# f = open("new_normal_finish_sum.json", "w")
-f = open(sys.argv[2], "w")
+
+f = open("/home/msl/ys/cute/nia/smooth/new_normal_finish_sum4.json", "w")
+# f = open(sys.argv[2], "w")
 json.dump(result, f, ensure_ascii=False, indent=2)
 f.close()

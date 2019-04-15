@@ -202,8 +202,8 @@ class SquadDb():
 
         if type == "context":
             morph_core(table_name, qas, 0, r)
-            # with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as exe:
-                # fs = {exe.submit(morph_core, table_name, qas, n, r) for n in range(0, len(qas), r)}
+            with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as exe:
+                fs = {exe.submit(morph_core, table_name, qas, n, r) for n in range(0, len(qas), r)}
 
 re_quotation = re.compile(r"\[+[\"\'](\[\[.+\]\])[\"\']\]+")
 
