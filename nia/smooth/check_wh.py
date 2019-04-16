@@ -12,9 +12,9 @@ def change_wh(wh):
     elif wh == "누가" or wh == "누구"or wh == "who":
         return "work_who"
     elif wh == "무엇을" or wh == "무엇이" or wh == "무슨" or wh == "무엇" or wh == "무엇은" or wh == "뭐라고"\
-            or wh == "우멋을" or wh == "무엇으로" or wh == "무얼을" or wh == "what":
+            or wh == "우멋을" or wh == "무엇으로" or wh == "무얼을" or wh == "무어슬" or wh == "what":
         return "work_what"
-    elif wh == "어떻게" or wh == "how":
+    elif wh == "어떻게" or wh == "어떻계" or wh == "how":
         return "work_how"
     elif wh == "왜" or wh == "why":
         return "work_why"
@@ -32,7 +32,15 @@ def check_wh():
     with open(open_file, "r") as f:
         for line in f:
             item = line.strip().split("\t")
-            wh = item[6].strip()
+            if len(item) == 10:
+                wh = item[6].strip()
+            elif len(item) == 4 and "asdf.tsv" in sys.argv[1]:
+                wh = item[2]
+            elif len(item) == 2 and "asdf.tsv" in sys.argv[1]:
+                wh = item[0]
+            else:
+                print (line)
+                break
             if wh != "언제" and wh != "어디서" and wh != "누가" and wh != "무엇을" and wh != "어떻게" and wh != "왜":
                 if wh in rd:
                     rd[wh] += 1
