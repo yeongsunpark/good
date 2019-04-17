@@ -1,4 +1,4 @@
-uthor__ = "Lynn Hong"
+author__ = "Lynn Hong"
 __date__ = "06/08/2017"
 
 import json
@@ -33,26 +33,24 @@ class SquadDb():
         ###user_input#########################################################
         self.db_table = "SQUAD_NEWS_NIA"
         self.data_output_dir = "/home/msl/ys/cute/nia/check"
-        self.lang = "kor"
+        self.lang = "no"
         self.version = "1"
-        self.test_ratio = 0.1    # dev_ratio
+        self.test_ratio = 0.2    # dev_ratio (8:1:1로 나누기 위해)
         self.maximum = None
         self.is_divide = False
         self.is_dp = False
         self.is_random = True
-        self.is_fixed = False
         #######################################################################
 
 
         self.db_cnf_dict = {}
-        self.context_table = "(%s, %s, %s, %s, %s)"
-        self.qna_table = "(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        # self.context_table = "(%s, %s, %s, %s, %s)"
+        # self.qna_table = "(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         self.con = None
         self.cur = None
         self.random_end = "ORDER BY RAND()" if self.is_random else ""
         self.dp_end = "_dp" if self.is_dp else ""
         self.context_ori = ""
-        self.nlp_analyze = NLPAnalyzer()
         self.processed_ctx_list = list()
 
     def easy_mysql(self, cfg_dict, encoding='utf8', autocommit=False):
@@ -76,39 +74,37 @@ class SquadDb():
         logger.info("Finish connecting to database...")
 
     def db2squad(self):
-        if self.maximum is not None:
-            #fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all WHERE season !=2 and season !=10 {} LIMIT {};"\
-            fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {} LIMIT {};"\
-                .format(self.random_end, self.maximum)
-        else:
-            fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {};"\
-                .format(self.random_end)
+        # fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {};".format(self.random_end)
+        fetch_sql_ctx = "SELECT id, title, context FROM all_context_all {};".format(self.random_end)
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
-        if self.is_fixed:
-            self.cur.execute("SELECT id, title, context, context_morph, context_dp FROM dev_context_fix {};"
-                             .format(self.random_end))
-            contexts_dev_fix = self.cur.fetchall()  # dev_fix
-        else:
-            contexts_dev_fix = []  # dev_fix
-        contexts_dev_fix_ids = [row[0] for row in contexts_dev_fix]
-        contexts_not_fix = [c for c in contexts if c[0] not in contexts_dev_fix_ids]  # not fix
+
+        # contexts_dev_fix = []  # dev_fix # 없음. 미리 지정한 test 나 val 로 갈 데이터인데 없음.
+        # contexts_dev_fix_ids = [row[0] for row in contexts_dev_fix]  # fix 된 건데 없지. 
+
+        contexts_not_fix = [c for c in contexts]  # not fix
+        # contexts_not_fix = [c for c in contexts if c[0] not in contexts_dev_fix_ids]  # not fix
         logger.info("len(contexts): {}".format(len(contexts)))
-        logger.info("len(contexts_dev_fix_ids): {}".format(len(contexts_dev_fix_ids)))
-        logger.info("len(contexts_not_fix): {}".format(len(contexts_not_fix)))
+        # logger.info("len(contexts_dev_fix_ids): {}".format(len(contexts_dev_fix_ids))) # 없지. 
+        logger.info("len(contexts_not_fix): {}".format(len(contexts_not_fix)))  # 위에 것과 같아야함. 
 
         train_cnt = math.floor((len(contexts))*(1-self.test_ratio))
-        context_train = random.sample(contexts_not_fix, train_cnt)
-        c_dev_tmp1 = [c for c in contexts_not_fix if c not in context_train]
-        c_dev_tmp2 = list(contexts_dev_fix)
+        context_train = random.sample(contexts_not_fix, train_cnt)  # 0.8은 여기
+        c_dev_tmp1 = [c for c in contexts_not_fix if c not in context_train]  # 나머지는 여기
+        # c_dev_tmp2 = list(contexts_dev_fix)  # 없음.
         logger.info("c_dev_tmp1: {}".format(len(c_dev_tmp1)))
-        logger.info("c_dev_tmp2: {}".format(len(c_dev_tmp2)))
-        context_dev = c_dev_tmp1 + c_dev_tmp2
+        # logger.info("c_dev_tmp2: {}".format(len(c_dev_tmp2)))
+        context_dNt = c_dev_tmp1  # 0.2는 여기 (그냥 한 번 더 넣을래)
+        # context_dNt = c_dev_tmp1 + c_dev_tmp2  # 0.2는 여기
+        dNt_cnt = math.floor((len(contexts) - len(context_train)) * 0.5)  # 전체 본문 길이 - train 본문(80%) 길이 / 2 -> 10%
+        context_dev = random.sample(context_dNt, dNt_cnt)
+        context_test = [c for c in contexts if c not in context_train and c not in context_dev]
         logger.info("train_cnt: {}".format(train_cnt))
         logger.info("Len context_train: {}".format(len(context_train)))
         logger.info("Len context_dev: {}".format(len(context_dev)))
+        logger.info("Len context_test: {}".format(len(context_test)))
 
-        for data_type in ["train", "dev"]:
+        for data_type in ["train", "dev", "test"]:
             cnt = 0
             result = dict()
             result['version'] = self.version
@@ -120,35 +116,19 @@ class SquadDb():
                 data_dict['title'] = context[1]
                 data_dict['paragraphs'] = list()
                 para_dict = dict()
-                para_dict['context_original'] = context[2]
-                if self.is_dp:
-                    para_dict['dp'] = context[4]
                 try:
-                    para_dict['context'] = context[3]
+                    para_dict['context_original'] = context[2]
                 except IndexError:
                     logger.critical(context)
                     exit()
+
                 qas_list = list()
-                if self.lang == "kor":
-                    fetch_sql_qa = "SELECT q_id, question, answer_start_morph, answer_end_morph, answer_morph, " \
-                                   "question_morph, answer, question_dp " \
-                                   "FROM all_qna WHERE c_id='{}'".\
-                        format(context[0])
-                else:
-                    fetch_sql_qa = "SELECT q_id, question, answer_start, answer FROM all_qna " \
-                                   "WHERE c_id='{}'".format(context[0])
+                fetch_sql_qa = "SELECT q_id, question, answer_start, answer FROM all_qna " \
+                                "WHERE c_id='{}'".format(context[0])
                 self.cur.execute(fetch_sql_qa)
                 for row in self.cur.fetchall():
-                    if self.lang == "kor":
-                        qa = {'id': row[0],
-                              'answers': [{'answer_start': row[2], 'answer_end': row[3],
-                                           'text': row[4], 'text_original': row[6]}],
-                              'question_original': row[1], 'question': row[5]}
-                        if self.is_dp:
-                            qa['question_dp'] = row[7]
-                    else:
-                        qa = {'id': row[0], 'answers': [{'answer_start': row[2], 'text': row[3]}],
-                              'question': row[1]}
+                    qa = {'id': row[0], 'answers': [{'answer_start': row[2], 'text': row[3]}],
+                            'question': row[1]}
                     qas_list.append(qa)
                     cnt += 1
                 para_dict['qas'] = qas_list
