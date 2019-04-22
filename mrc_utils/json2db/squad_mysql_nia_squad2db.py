@@ -131,15 +131,13 @@ if __name__ == "__main__":
         q_id_index = sys.argv[7] # 수정하기! (1)
         """
         mode = "squad2db"
-        season = "2"  # 수정하기!
+        season = "3"  # 수정하기!
         db_table = "SQUAD_NEWS_NIA"
-        json_input = "/home/msl/ys/cute/nia/yes_marker/checker410.json"
-        # start_id = 1  # 수정하기! 1(context_id)
-        start_id = 5607  # 수정하기! 1(context_id)
-        data_type = "news"  # news
-        creator = "m2"  # 수정하기!
-        # q_id_index = 1  # 수정하기! (1)(q_id)
-        q_id_index = 28373  # 수정하기! (1)(q_id)
+        json_input = "/home/msl/ys/cute/nia/cw19/1802.json"
+        start_id = 37260  # 수정하기! 1(context_id)
+        data_type = "news"
+        creator = "c1"  # 수정하기!
+        q_id_index = 195811  # 수정하기! (1)(q_id)
         #  select max(abs(substring_index(substring_index(q_id, "_",-1), "-",1))) from all_qna; 이거에 +1 하기!
         # select count(*) from all_qna 이거에 +1 해도 똑같네 ㅋㅋㅋ
     except: print("")

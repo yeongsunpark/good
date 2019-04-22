@@ -79,9 +79,6 @@ class SquadDb():
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
 
-        # contexts_dev_fix = []  # dev_fix # 없음. 미리 지정한 test 나 val 로 갈 데이터인데 없음.
-        # contexts_dev_fix_ids = [row[0] for row in contexts_dev_fix]  # fix 된 건데 없지. 
-
         contexts_not_fix = [c for c in contexts]  # not fix
         # contexts_not_fix = [c for c in contexts if c[0] not in contexts_dev_fix_ids]  # not fix
         logger.info("len(contexts): {}".format(len(contexts)))
@@ -117,24 +114,25 @@ class SquadDb():
                 data_dict['paragraphs'] = list()
                 para_dict = dict()
                 try:
-                    para_dict['context_original'] = context[2]
+                    para_dict['context'] = context[2]
                 except IndexError:
                     logger.critical(context)
                     exit()
 
                 qas_list = list()
-                fetch_sql_qa = "SELECT q_id, question, answer_start, answer FROM all_qna " \
+                fetch_sql_qa = "SELECT q_id, question, answer_start, answer, substring_index(classType,'_',2) FROM all_qna " \
                                 "WHERE c_id='{}'".format(context[0])
                 self.cur.execute(fetch_sql_qa)
                 for row in self.cur.fetchall():
                     qa = {'id': row[0], 'answers': [{'answer_start': row[2], 'text': row[3]}],
-                            'question': row[1]}
+                            'question': row[1], 'classtype':row[4]}
                     qas_list.append(qa)
                     cnt += 1
                 para_dict['qas'] = qas_list
                 data_dict['paragraphs'].append(para_dict)
                 result['data'].append(data_dict)
             logger.info("Finish creating json structure({})".format(data_type))
+
             with open(os.path.join(self.data_output_dir, "ko_nia_v{}_squad{}_{}.json".
                     format(self.version, self.dp_end, data_type)),
                       'w', encoding='utf8') as fp:
@@ -144,6 +142,7 @@ class SquadDb():
                       'w', encoding='utf8') as fp:
                 json.dump(result, fp, ensure_ascii=False, indent=2)
             logger.info("Data dump {} finished..: len {}".format(data_type, cnt))
+
 
 if __name__ == "__main__":
 

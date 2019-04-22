@@ -1,9 +1,9 @@
 import json
 
-read_json_path1 = '/home/msl/data/mrc/output/ko_cv/ko_cv_v42_squad_dev.json'
-read_json_path2 = '/home/msl/data/mrc/output/ko_cv/ko_cv_vhana_squad_dev.json' 
+read_json_path1 = '/home/msl/ys/cute/nia/cw19/sum3.json'
+read_json_path2 = '/home/msl/ys/cute/nia/cw19/1802.json'
 #read_json_path2 = '/home/msl/data/mrc/output/ko_revision/ko_revision_v2_squad_train.json'
-write_json_path = 'ko_extend_hana42_squad_dev.json'
+write_json_path = '/home/msl/ys/cute/nia/cw19/sum4.json'
 
 with open(read_json_path1, 'r', encoding='utf-8') as f1:
     json_data1 = json.load(f1)
