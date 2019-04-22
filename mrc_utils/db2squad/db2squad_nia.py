@@ -75,7 +75,7 @@ class SquadDb():
 
     def db2squad(self):
         # fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {};".format(self.random_end)
-        fetch_sql_ctx = "SELECT id, title, context FROM all_context_all {};".format(self.random_end)
+        fetch_sql_ctx = "SELECT id, title, context FROM all_context_all where season=1 or season=2 or season=3 {};".format(self.random_end)
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
 
