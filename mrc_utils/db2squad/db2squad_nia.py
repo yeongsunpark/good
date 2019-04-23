@@ -34,7 +34,7 @@ class SquadDb():
         self.db_table = "SQUAD_NEWS_NIA"
         self.data_output_dir = "/home/msl/ys/cute/nia/check"
         self.lang = "no"
-        self.version = "1"
+        self.version = "0423"
         self.test_ratio = 0.2    # dev_ratio (8:1:1로 나누기 위해)
         self.maximum = None
         self.is_divide = False
@@ -75,7 +75,8 @@ class SquadDb():
 
     def db2squad(self):
         # fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {};".format(self.random_end)
-        fetch_sql_ctx = "SELECT id, title, context FROM all_context_all where season=1 or season=2 or season=3 {};".format(self.random_end)
+        # fetch_sql_ctx = "SELECT id, title, context FROM all_context_all where season=5 {};".format(self.random_end)
+        fetch_sql_ctx = "SELECT CTX.id, CTX.title, CTX.context  FROM all_context as CTX INNER JOIN all_qna as QA on QA.c_id = CTX.id WHERE CTX.season = 5 and QA.question IS NOT NULL AND QA.ANSWER IS NOT NULL GROUP BY CTX.id {} ".format(self.random_end)
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
 
@@ -129,8 +130,11 @@ class SquadDb():
                     qas_list.append(qa)
                     cnt += 1
                 para_dict['qas'] = qas_list
-                data_dict['paragraphs'].append(para_dict)
-                result['data'].append(data_dict)
+                if qas_list == "":
+                    continue
+                else:
+                    data_dict['paragraphs'].append(para_dict)
+                    result['data'].append(data_dict)
             logger.info("Finish creating json structure({})".format(data_type))
 
             with open(os.path.join(self.data_output_dir, "ko_nia_v{}_squad{}_{}.json".
