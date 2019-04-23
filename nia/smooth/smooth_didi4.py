@@ -36,6 +36,7 @@ with open("/home/msl/ys/cute/nia/smooth/new_normal_finish-sum3.txt", "r") as f:
                 break
             answer_s = item[8]
             answer_e = item[9]
+
             qas_dict = dict()
             qas_dict['q_id'] = q_id  # 크웍엔 없음
             qas_dict['question'] = q_1
