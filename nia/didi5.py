@@ -17,7 +17,7 @@ with open("/home/msl/ys/cute/nia/cw18_only.txt", "r") as f:
         item = line.strip().split("\t")
         if len(item) == 10:
             para_dict = dict()
-            para_dict['qas'] = list()
+            para_dict['main_qa_list'] = list()
             title = item[0]
             context_ori = item[7]
             number += 1
