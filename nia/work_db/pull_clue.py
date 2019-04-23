@@ -37,10 +37,10 @@ class SquadDb():
         except Exception as e:
             pass
     def select_data(self):
-        f = open("/home/msl/ys/cute/nia/sw2.txt" ,"w")
+        f = open("/home/msl/ys/cute/nia/190423similar.txt" ,"w")
         try:
             # select_sql = 'select c_id, q_id, question, answer from SQUAD_KO_ORI.all_qna WHERE q_id =%s'
-            select_sql2 = 'select category_id, qa_id, question, answer, reason_morpheme from DATA_QA_TB'
+            select_sql2 = 'select category_id, qa_id, question, answer, reason_morpheme from DATA_QA_TB where abs(category_id) >= 120207'
             # self.cur.execute(select_sql, (q_id))
             self.cur.execute(select_sql2)
             select_data_row = self.cur.fetchall()
