@@ -88,6 +88,8 @@ class SquadDb():
         result['version'] = self.version
         result['creator'] = "MINDs Lab."
         result['data'] = list()
+        wh_dict = {"work_who": 0, "work_when": 1, "work_where": 2, "work_what": 3, "work_how": 4, "work_why": 5, "": ""}
+        i = 1
 
         logger.info("start..")
 
@@ -102,9 +104,10 @@ class SquadDb():
                 if row[2] is not None and row[3] is not None and row[6] is not None and row[9] is not None:
                 # if row[0:10] is not None:
                     print (row)
-                    qa = {'q_id': str(row[0]) + "_" + str(row[1]), 'answers': row[3], 'start_index': row[4],
-                          'end_index': row[5], 'question': row[2],
-                          'reason': row[6], 'reason_start': row[7], "reason_end": row[8], "wh": row[9]}
+                    qa = {'q_id': str(row[0]) + "_" + str(row[1]), 'answer': row[3], 'begin': row[4],
+                          'end': row[5], 'question': row[2],
+                          'reason': row[6], 'reason_start': row[7], "reason_end": row[8], "classType": row[9], "type":wh_dict[row[9]],
+                          "isFlexible":0}
                     qas_list.append(qa)
                     cnt += 1
 
@@ -115,9 +118,12 @@ class SquadDb():
             data_dict['main_qa_list'] = list()
             data_dict['text'] = context[1]
             # fileName = context[0]
-            # source = 0
+            data_dict['source'] = 0
             # seq = ""
-            # doc_type = 0
+            data_dict['doc_type'] = 0
+            data_dict['sub_doc_type'] = 0
+            data_dict['fileName'] = i
+            i +=1
             data_dict['main_qa_list'] = qas_list
             # data_dict['paragraphs'].append(para_dict)
             result['data'].append(data_dict)
