@@ -37,12 +37,12 @@ class SquadDb():
         except Exception as e:
             pass
     def select_data(self):
-        f = open("/home/msl/ys/cute/nia/general_cate_text.txt" ,"w")
+        f = open("/home/msl/ys/cute/nia/season6_text.txt" ,"w")
     
         try:
             # select_sql = 'select c_id, q_id, question, answer from SQUAD_KO_ORI.all_qna WHERE q_id =%s'
             # select_sql2 = 'select char_length(context) from all_context'
-            select_sql3 = 'select context from all_context'
+            select_sql3 = 'select id, context from all_context where season = 6'
             # self.cur.execute(select_sql, (q_id))
             # self.cur.execute(select_sql2)
             self.cur.execute(select_sql3)
@@ -50,13 +50,13 @@ class SquadDb():
             print (len(select_data_row))
             self.con.commit()
             for i in range(len(select_data_row)):
-               f.write(str(select_data_row[i][0]))
-               f.write("\n")
-
-                #f.write(select_data_row[i][0])
-                #f.write("\t")
-                #f.write(select_data_row[i][1])
+                #f.write(str(select_data_row[i][0]))
                 #f.write("\n")
+
+                f.write(select_data_row[i][0])
+                f.write("\t")
+                f.write(select_data_row[i][1])
+                f.write("\n")
         except:
             print("no")
         

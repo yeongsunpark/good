@@ -37,7 +37,7 @@ class SquadDb():
         except Exception as e:
             pass
     def select_data(self):
-        f = open("/home/msl/ys/cute/nia/general_cate.txt" ,"w")
+        f = open("/home/msl/ys/cute/nia/sw.txt" ,"w")
         """
         try:
             # select_sql = 'select c_id, q_id, question, answer from SQUAD_KO_ORI.all_qna WHERE q_id =%s'
@@ -59,11 +59,14 @@ class SquadDb():
             print("no")
         """
         try:
-            fetch_sql_ctx = "SELECT id, title, context FROM all_context_all"
+            fetch_sql_ctx = "SELECT id, title, context FROM all_context where source = 0 "
             self.cur.execute(fetch_sql_ctx)
             contexts = self.cur.fetchall()  # entire
 
             for context in contexts:
+
+                f.write(str(context[0]), "\t", str(context[1]), "\t", str(context[2]), "\n")
+                """
                 fetch_sql_qa = "SELECT q_id, answer_start, answer_end, answer FROM all_qna " \
                                 "WHERE c_id='{}'".format(context[0])
                 self.cur.execute(fetch_sql_qa)
@@ -77,6 +80,7 @@ class SquadDb():
                         # print (row)
                         f.write(str(row))
                         f.write("\n")
+                """
         except:
             print ("no")
 
