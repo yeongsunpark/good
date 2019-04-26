@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import logging
 import os, sys
-
 import pymysql
 
 sys.path.append(os.path.abspath('..'))
-# import custom_logger
-import csv
-
-
-
+# 본문[시작위치:끝위치] != 답변 찾기용
 class SquadDb():
 
     def __init__(self):
@@ -59,28 +53,27 @@ class SquadDb():
             print("no")
         """
         try:
-            fetch_sql_ctx = "SELECT id, title, context FROM all_context where source = 0 "
+            a =0
+            fetch_sql_ctx = "SELECT id, context FROM all_context "
             self.cur.execute(fetch_sql_ctx)
             contexts = self.cur.fetchall()  # entire
+            print (len(contexts))
 
             for context in contexts:
 
-                f.write(str(context[0]), "\t", str(context[1]), "\t", str(context[2]), "\n")
-                """
                 fetch_sql_qa = "SELECT q_id, answer_start, answer_end, answer FROM all_qna " \
                                 "WHERE c_id='{}'".format(context[0])
                 self.cur.execute(fetch_sql_qa)
                 for row in self.cur.fetchall():
                     id = row[0]
-                    a_s = row[1]
-                    a_e = row[2]
+                    a_s = int(row[1])
+                    a_e = int(row[2])
                     answer = row[3]
 
-                    if context[2][a_s:a_e] != answer:
-                        # print (row)
+                    if context[1][a_s:a_e] != answer:
                         f.write(str(row))
                         f.write("\n")
-                """
+
         except:
             print ("no")
 
@@ -88,7 +81,3 @@ if __name__ == "__main__":
     j = SquadDb()
     j.connect_db()
     j.select_data()
-    # j.update_data()
-    # j.count_data()
-    # j.insert_data()
-    # logger.info("All finished")
