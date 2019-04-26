@@ -6,9 +6,6 @@ import os, sys
 import pymysql
 
 sys.path.append(os.path.abspath('..'))
-# import custom_logger
-import csv
-
 
 
 class SquadDb():
@@ -64,7 +61,3 @@ if __name__ == "__main__":
     j = SquadDb()
     j.connect_db()
     j.select_data()
-    # j.update_data()
-    # j.count_data()
-    # j.insert_data()
-    # logger.info("All finished")
