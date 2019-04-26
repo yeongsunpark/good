@@ -5,9 +5,7 @@
 
 import logging
 import os, sys
-
 import pymysql
-
 sys.path.append(os.path.abspath('..'))
 # import custom_logger
 import csv
@@ -39,7 +37,7 @@ class SquadDb():
             pass
     def update_data(self):
         cate_dict = {"정치": 1, "경제": 2, "사회": 3, "생활": 4, "IT/과학": 5, "연예": 6, "스포츠":7, "문화":8, "미용/건강":9}
-        f = open("/home/msl/ys/cute/nia/xdc/cate_0421_com.txt" ,"r")
+        f = open("/home/msl/ys/cute/nia/xdc/season7_text_com.txt" ,"r")
         for line in f:
             line = line.replace("\n","")
             item = line.split("\t")
@@ -53,7 +51,25 @@ class SquadDb():
                 self.cur.execute(update_memo_sql, (cate, id, context))
                 self.con.commit()
                 print (item[0])
-                # break
+            except:
+                print(line)
+                break
+
+    def update_wh(self):
+        f = open("/home/msl/ys/cute/nia/xdc/0424_wh_com.txt" ,"r")
+        for line in f:
+            line = line.replace("\n","")
+            item = line.split("\t")
+
+            q_id = item[0]
+            question = item[1]
+            wh = [item[2]]
+
+            try:
+                update_memo_sql = "update all_qna set classType = %s where q_id = %s and question = %s"
+                self.cur.execute(update_memo_sql, (wh, q_id, question))
+                self.con.commit()
+                print (item[0])
             except:
                 print(line)
                 break
@@ -61,4 +77,4 @@ class SquadDb():
 if __name__ == "__main__":
     j = SquadDb()
     j.connect_db()
-    j.update_data()
+    j.update_wh()
