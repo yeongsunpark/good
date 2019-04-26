@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Created by YeongsunPark at 2019-04-16
+# 클루 (#8) 관련
 
 import json
 import logging
