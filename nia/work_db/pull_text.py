@@ -42,7 +42,7 @@ class SquadDb():
         try:
             # select_sql = 'select c_id, q_id, question, answer from SQUAD_KO_ORI.all_qna WHERE q_id =%s'
             # select_sql2 = 'select char_length(context) from all_context'
-            select_sql3 = 'select id, context from all_context where season = 6'
+            select_sql3 = 'select id, context from all_context where season = 7'
             # self.cur.execute(select_sql, (q_id))
             # self.cur.execute(select_sql2)
             self.cur.execute(select_sql3)

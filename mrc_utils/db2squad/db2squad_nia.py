@@ -34,7 +34,7 @@ class SquadDb():
         self.db_table = "SQUAD_NEWS_NIA"
         self.data_output_dir = "/home/msl/ys/cute/nia/check"
         self.lang = "no"
-        self.version = "0423"
+        self.version = "0425"
         self.test_ratio = 0.2    # dev_ratio (8:1:1로 나누기 위해)
         self.maximum = None
         self.is_divide = False
@@ -75,8 +75,8 @@ class SquadDb():
 
     def db2squad(self):
         # fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {};".format(self.random_end)
-        # fetch_sql_ctx = "SELECT id, title, context FROM all_context_all where season=5 {};".format(self.random_end)
-        fetch_sql_ctx = "SELECT CTX.id, CTX.title, CTX.context  FROM all_context as CTX INNER JOIN all_qna as QA on QA.c_id = CTX.id WHERE CTX.season = 5 and QA.question IS NOT NULL AND QA.ANSWER IS NOT NULL GROUP BY CTX.id {} ".format(self.random_end)
+        fetch_sql_ctx = "SELECT id, title, context FROM all_context_all where season=1 or season=2 or season=3 or season=5 or season=6 {};".format(self.random_end)
+        # fetch_sql_ctx = "SELECT CTX.id, CTX.title, CTX.context  FROM all_context as CTX INNER JOIN all_qna as QA on QA.c_id = CTX.id WHERE CTX.season = 5 and QA.question IS NOT NULL AND QA.ANSWER IS NOT NULL GROUP BY CTX.id {} ".format(self.random_end)
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
 
@@ -122,7 +122,7 @@ class SquadDb():
 
                 qas_list = list()
                 fetch_sql_qa = "SELECT q_id, question, answer_start, answer, substring_index(classType,'_',2) FROM all_qna " \
-                                "WHERE c_id='{}'".format(context[0])
+                                "WHERE c_id='{}' and q_id like '%-1'".format(context[0])
                 self.cur.execute(fetch_sql_qa)
                 for row in self.cur.fetchall():
                     qa = {'id': row[0], 'answers': [{'answer_start': row[2], 'text': row[3]}],

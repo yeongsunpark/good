@@ -100,11 +100,14 @@ class SquadDb():
 
             # for qa in zip (d['main_qa_list']):
             for qa, i in zip (d['main_qa_list'], range(len(d['main_qa_list']))):
-                answer = qa['answer']
-                begin = qa['begin']
+                # answer = qa['answer']
+                answer = ""
+                # begin = qa['begin']
+                begin = ""
                 q = str(qa['question'])
                 isf = qa['isFlexible']
-                end = qa['end']
+                # end = qa['end']
+                end = ""
                 numType = qa['type']
                 classType = qa['classType']
                 q_id = creator + "_" + str(q_id_index) + "-1"
@@ -131,13 +134,13 @@ if __name__ == "__main__":
         q_id_index = sys.argv[7] # 수정하기! (1)
         """
         mode = "squad2db"
-        season = "6"  # 수정하기!
+        season = "7"  # 수정하기!
         db_table = "SQUAD_NEWS_NIA"
-        json_input = "/home/msl/ys/cute/nia/common_tsv/didi4_0423.json"
-        start_id = 71922  # 수정하기! 1(context_id)
+        json_input = "/home/msl/ys/cute/nia/0424cw/1801.json"
+        start_id = 74769  # 수정하기! 1(context_id)
         data_type = "news"
-        creator = "m5"  # 수정하기!
-        q_id_index = 305458  # 수정하기! (1)(q_id)
+        creator = "c2"  # 수정하기!
+        q_id_index = 313193  # 수정하기! (1)(q_id)
         #  select max(abs(substring_index(substring_index(q_id, "_",-1), "-",1))) from all_qna; 이거에 +1 하기!
         # select count(*) from all_qna 이거에 +1 해도 똑같네 ㅋㅋㅋ
     except: print("")
