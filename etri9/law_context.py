@@ -34,4 +34,4 @@ for f in os.listdir(input_dir):
         with open((os.path.join(input_dir, "output/{}_result.json").format(f.split(".")[0])), "w") as f2:
             f2.write(data)
             logger.info("save file: %s" % f)
-        # os.system("mv {input_dir}/{file} {input_dir}/used/".format(input_dir=input_dir, file=f))
+        os.system("mv {input_dir}/{file} {input_dir}/used/".format(input_dir=input_dir, file=f))
