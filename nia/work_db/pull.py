@@ -32,26 +32,7 @@ class SquadDb():
             pass
     def select_data(self):
         f = open("/home/msl/ys/cute/nia/sw.txt" ,"w")
-        """
-        try:
-            # select_sql = 'select c_id, q_id, question, answer from SQUAD_KO_ORI.all_qna WHERE q_id =%s'
-            select_sql2 = 'select char_length(context) from all_context'
-            # self.cur.execute(select_sql, (q_id))
-            self.cur.execute(select_sql2)
-            select_data_row = self.cur.fetchall()
-            print (len(select_data_row))
-            self.con.commit()
-            for i in range(len(select_data_row)):
-                f.write(str(select_data_row[i][0]))
-                f.write("\n")
-
-                # f.write(select_data_row[i][0])
-                # f.write("\t")
-                # f.write(select_data_row[i][1])
-                # f.write("\n")
-        except:
-            print("no")
-        """
+        result = []
         try:
             a =0
             fetch_sql_ctx = "SELECT id, context FROM all_context "
@@ -71,8 +52,10 @@ class SquadDb():
                     answer = row[3]
 
                     if context[1][a_s:a_e] != answer:
-                        f.write(str(row))
-                        f.write("\n")
+                        result.append("\t".join([str(row[0]), str(row[1]), str(row[2]), str(row[3]), str(context[0]), str(context[1])]))
+            for d in result:
+                f.write(d)
+                f.write("\n")
 
         except:
             print ("no")
