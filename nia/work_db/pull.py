@@ -2,18 +2,28 @@
 
 import os, sys
 import pymysql
-import pull_module
+from pull_module import SquadDbSuper
 sys.path.append(os.path.abspath('..'))
 # 본문[시작위치:끝위치] != 답변 찾기용
 
-class SquadDb():
+class SquadDb(SquadDbSuper):
     def __init__(self):
-        self.con = None
-        self.cur = None
+        super(SquadDb, self).__init__()
+        # self.db_cnf_dict = {"host": '10.122.64.83', "usr": "root", "pwd": "data~secret!",
+        #                     "db": "SQUAD_NEWS_NIA", "encoding": "utf8"}
+        # self.con = None
+        # self.cur = None
+
     def connect_db2(self):
-        pull_module.SquadDb.connect_db(self)
-        cfg_dict = pull_module.SquadDb.connect_db(self)
-        self.cur = pull_module.SquadDb.easy_mysql(self, cfg_dict)
+        # pull_module.SquadDb.connect_db(self)
+        # self.connect_db()
+        # cfg_dict = pull_module.SquadDb.connect_db(self)
+        # print (cfg_dict)
+        # self.cur = pull_module.SquadDb.easy_mysql(self, cfg_dict)
+
+        cfg_dict = self.connect_db()
+        print(cfg_dict)
+        self.cur = self.easy_mysql(cfg_dict)
 
     def select_data(self):
         f = open("/home/msl/ys/cute/nia/sw.txt" ,"w")
