@@ -5,13 +5,13 @@ import pymysql
 
 sys.path.append(os.path.abspath('..'))
 
-class SquadDb():
+class SquadDbSuper():
     def __init__(self):
         self.db_cnf_dict = {"host": '10.122.64.83', "usr": "root", "pwd": "data~secret!",
                             "db": "SQUAD_NEWS_NIA", "encoding": "utf8"}
         self.con = None
         self.cur = None
-        # self.connect_db()
+        self.connect_db()
 
     def easy_mysql(self, cfg_dict, encoding='utf8', autocommit=False):
         self.con = pymysql.connect(host=cfg_dict['host'], user=cfg_dict['usr'],
@@ -27,10 +27,11 @@ class SquadDb():
                             pwd=self.db_cnf_dict['pwd'], db=self.db_cnf_dict['db'])
             self.easy_mysql(cfg_dict, encoding=self.db_cnf_dict['encoding'], autocommit=True)     # turn-on autocummit, be careful!
             self.cur.execute("SET NAMES utf8")
-            print ("hi")
+            print (cfg_dict)
+            return cfg_dict
         except Exception as e:
+            print (e)
             pass
-        return cfg_dict
 
 if __name__ == "__main__":
     j = SquadDb()
