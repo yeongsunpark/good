@@ -6,7 +6,6 @@ import pymysql
 sys.path.append(os.path.abspath('..'))
 # 본문[시작위치:끝위치] != 답변 찾기용
 class SquadDb():
-
     def __init__(self):
         self.db_cnf_dict = {"host": '10.122.64.83', "usr": "root", "pwd": "data~secret!",
                             "db": "SQUAD_NEWS_NIA", "encoding": "utf8"}
