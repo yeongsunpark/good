@@ -2,40 +2,29 @@
 
 import os, sys
 import pymysql
-
+import pull_module
 sys.path.append(os.path.abspath('..'))
 # 본문[시작위치:끝위치] != 답변 찾기용
+
 class SquadDb():
     def __init__(self):
-        self.db_cnf_dict = {"host": '10.122.64.83', "usr": "root", "pwd": "data~secret!",
-                            "db": "SQUAD_NEWS_NIA", "encoding": "utf8"}
         self.con = None
         self.cur = None
-        self.connect_db()
+    def connect_db2(self):
+        pull_module.SquadDb.connect_db(self)
+        cfg_dict = pull_module.SquadDb.connect_db(self)
+        self.cur = pull_module.SquadDb.easy_mysql(self, cfg_dict)
 
-    def easy_mysql(self, cfg_dict, encoding='utf8', autocommit=False):
-        self.con = pymysql.connect(host=cfg_dict['host'], user=cfg_dict['usr'],
-                                   passwd=cfg_dict['pwd'], db=cfg_dict['db'], charset=encoding)
-        self.cur = self.con.cursor()
-        if autocommit is True:
-            self.con.autocommit(True)
-
-    def connect_db(self):
-        try:        # try to connect to project db
-            cfg_dict = dict(host=self.db_cnf_dict['host'], usr=self.db_cnf_dict['usr'],
-                            pwd=self.db_cnf_dict['pwd'], db=self.db_cnf_dict['db'])
-            self.easy_mysql(cfg_dict, encoding=self.db_cnf_dict['encoding'], autocommit=True)     # turn-on autocummit, be careful!
-            self.cur.execute("SET NAMES utf8")
-            print ("hi")
-        except Exception as e:
-            pass
     def select_data(self):
         f = open("/home/msl/ys/cute/nia/sw.txt" ,"w")
         result = []
         try:
             a =0
             fetch_sql_ctx = "SELECT id, context FROM all_context "
-            self.cur.execute(fetch_sql_ctx)
+            try:
+                self.cur.execute(fetch_sql_ctx)
+            except:
+                print ("nnnnnnno")
             contexts = self.cur.fetchall()  # entire
             print (len(contexts))
 
@@ -61,5 +50,5 @@ class SquadDb():
 
 if __name__ == "__main__":
     j = SquadDb()
-    j.connect_db()
+    j.connect_db2()
     j.select_data()
