@@ -18,8 +18,9 @@ input_dir = "/home/msl/ys/cute/data/law"
 logging.basicConfig(filename='%s/example.log'%input_dir,level=logging.INFO,
                     format='[%(levelname)s|%(filename)s:%(lineno)s] %(asctime)s >>> %(message)s')
 
+
 revision = re.compile(  # '<개정 *\d+[.] *\d+[.] *\d+[.][,] *\d+[.] *\d+[.] \d*[.]>|'
-    '<개정( *\d+[.] *\d+[.] *\d+[.][,])+ *\d+[.] *\d+[.] \d*[.]>|'
+    '<개정( *\d+[.] *\d+[.] *\d+[.][,])+ *\d+[.] *\d+[.] \d*[.]*>|'
     '<(개정|신설) *\d+[.] *\d+[.] *\d+[.]([,] *\d+[.] *\d+[.] *\d+[.])*>|'
     '[[](전문개정|제목개정|본조신설) *\d+[.] *\d+[.] * \d+[.]]|'
     '[[]시행일 *[:] *\d+[.] *\d+[.] *\d+[.]*]|'
@@ -34,7 +35,8 @@ revision = re.compile(  # '<개정 *\d+[.] *\d+[.] *\d+[.][,] *\d+[.] *\d+[.] \d
     '[[]\d+[.] *\d+[.] *\d+[.] *법률 제\d+.*삭제함.]|'
     '[[]법률 제\d+호[(]\d+[.] *\d+[.] *\d+[.][)].*규정에 의하여 .*\d일까지 유효함]|'
     '<단서 생략>|'
-    '.법.')
+    '<개정 *\d+[.] *\d+[.] *\d+>')
+
 
 
 for f in os.listdir(input_dir):
@@ -59,7 +61,27 @@ for f in os.listdir(input_dir):
         # os.system("mv {input_dir}/{file} {input_dir}/used/".format(input_dir=input_dir, file=f))
 
         with open((os.path.join(input_dir, "output/{}_pretty_result.json").format(f.split(".")[0])), "w") as f3:
+            """
             new_dict = {}
+            data_dict = json.loads(data)
+            for d in data_dict:
+                for i in range(len(data_dict[d])):  # 11
+                    new_words = ""
+                    for item in data_dict[d][i]['조내용']:
+                        if revision.search(item):
+                            new = revision.sub("", item)
+                            new_words+= new
+                        else:
+                            new_words+= item
+
+                        data_dict[d][i]['조내용'] = new_words
+                        new_dict[d] = data_dict[d]
+            data_dict = json.dumps(new_dict[d], ensure_ascii=False, indent = 2)
+            f3.write(data_dict)
+            """
+            result = dict()
+            result['0'] = list()
+            print (result)
             data_dict = json.loads(data)
             for d in data_dict:
                 for i in range(len(data_dict[d])):
@@ -70,17 +92,8 @@ for f in os.listdir(input_dir):
                             new_words+= new
                         else:
                             new_words+= item
-                            # print (new_words)
                         data_dict[d][i]['조내용'] = new_words
-                    new_dict[d] = data_dict[d]
-                    # if revision.search(str(data_dict[d][i]['조내용'])):
-                        # print (str(data_dict[d][i]['조내용']))
-                        # new = revision.sub('', str(data_dict[d][i]['조내용']))
-                        # data_dict[d][i]['조내용'] = new
-                    # if len(str(data_dict[d][i]['조내용'])) <= 50:
-                        # print (str(data_dict[d][i]['조내용']))
-                        # continue
-                    # else:
-                        # new_dict[d] = data_dict[d]
-            data_dict = json.dumps(new_dict, ensure_ascii=False, indent = 2)
-            f3.write(data_dict)
+                    if len(new_words) >= 50:
+                        result['0'].append(data_dict[d][i])
+                data_dict = json.dumps(result, ensure_ascii=False, indent = 2)
+                f3.write(data_dict)
