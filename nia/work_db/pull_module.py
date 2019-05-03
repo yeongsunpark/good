@@ -11,7 +11,6 @@ class SquadDbSuper():
                             "db": "SQUAD_NEWS_NIA", "encoding": "utf8"}
         self.con = None
         self.cur = None
-        self.connect_db()
 
     def easy_mysql(self, cfg_dict, encoding='utf8', autocommit=False):
         self.con = pymysql.connect(host=cfg_dict['host'], user=cfg_dict['usr'],
@@ -27,12 +26,11 @@ class SquadDbSuper():
                             pwd=self.db_cnf_dict['pwd'], db=self.db_cnf_dict['db'])
             self.easy_mysql(cfg_dict, encoding=self.db_cnf_dict['encoding'], autocommit=True)     # turn-on autocummit, be careful!
             self.cur.execute("SET NAMES utf8")
-            print (cfg_dict)
             return cfg_dict
         except Exception as e:
             print (e)
             pass
 
 if __name__ == "__main__":
-    j = SquadDb()
+    j = SquadDbSuper()
     j.connect_db()

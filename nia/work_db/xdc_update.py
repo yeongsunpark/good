@@ -7,40 +7,27 @@ import logging
 import os, sys
 import pymysql
 sys.path.append(os.path.abspath('..'))
-# import custom_logger
+from pull_module import SquadDbSuper
 import csv
 
-class SquadDb():
-
+class SquadDb(SquadDbSuper):
     def __init__(self):
-        self.db_cnf_dict = {"host": '10.122.64.83', "usr": "root", "pwd": "data~secret!",
-                            "db": "SQUAD_NEWS_NIA", "encoding": "utf8"}
-        self.con = None
-        self.cur = None
-        self.connect_db()
+        super(SquadDb, self).__init__()
 
-    def easy_mysql(self, cfg_dict, encoding='utf8', autocommit=False):
-        self.con = pymysql.connect(host=cfg_dict['host'], user=cfg_dict['usr'],
-                                   passwd=cfg_dict['pwd'], db=cfg_dict['db'], charset=encoding)
-        self.cur = self.con.cursor()
-        if autocommit is True:
-            self.con.autocommit(True)
+    def connect_db2(self):
+        cfg_dict = self.connect_db()
+        self.cur = self.easy_mysql(cfg_dict)
 
-    def connect_db(self):
-        try:        # try to connect to project db
-            cfg_dict = dict(host=self.db_cnf_dict['host'], usr=self.db_cnf_dict['usr'],
-                            pwd=self.db_cnf_dict['pwd'], db=self.db_cnf_dict['db'])
-            self.easy_mysql(cfg_dict, encoding=self.db_cnf_dict['encoding'], autocommit=True)     # turn-on autocummit, be careful!
-            self.cur.execute("SET NAMES utf8")
-            print ("hi")
-        except Exception as e:
-            pass
+    def line2item(self, line):
+        line = line.replace("\n","")
+        item = line.split("\t")
+        return item
+
     def update_data(self):
         cate_dict = {"정치": 1, "경제": 2, "사회": 3, "생활": 4, "IT/과학": 5, "연예": 6, "스포츠":7, "문화":8, "미용/건강":9}
         f = open("/home/msl/ys/cute/nia/xdc/season7_text_com.txt" ,"r")
         for line in f:
-            line = line.replace("\n","")
-            item = line.split("\t")
+            item = self.line2item(line)
 
             id = item[0]
             context = item[1]
@@ -54,12 +41,12 @@ class SquadDb():
             except:
                 print(line)
                 break
+        f.close()
 
     def update_wh(self):
         f = open("/home/msl/ys/cute/nia/xdc/0424_wh_com.txt" ,"r")
         for line in f:
-            line = line.replace("\n","")
-            item = line.split("\t")
+            item = self.line2item(line)
 
             q_id = item[0]
             question = item[1]
@@ -73,8 +60,44 @@ class SquadDb():
             except:
                 print(line)
                 break
+        f.close()
+
+    def update_startend(self):
+        f = open("/home/msl/ys/cute/nia/sw2.txt")
+        for line in f:
+            item = self.line2item(line)
+            q_id, answer_start, answer_end, answer = item[0], item[1], item[2], item[3]
+            try:
+                # update_start_sql = "update all_qna set answer_start = %s where q_id = %s and answer = %s"
+                update_end_sql = "update all_qna set answer_end = %s where q_id = %s and answer = %s"
+                # self.cur.execute(update_start_sql, (answer_start, q_id, answer))
+                self.cur.execute(update_end_sql, (answer_end, q_id, answer))
+                self.con.commit()
+                print (q_id)
+            except Exception as e:
+                print (e)
+                print (line)
+                break
+        f.close()
+
+    def update_dup(self):
+        f = open("/home/msl/ys/cute/nia/up_dup.tsv")
+        for line in f:
+            item = self.line2item(line)
+            q_id, new_question = item[0], item[1]
+            try:
+                update_end_sql = "update all_qna set question = %s where q_id = %s"
+                # self.cur.execute(update_start_sql, (answer_start, q_id, answer))
+                self.cur.execute(update_end_sql, (new_question, q_id))
+                self.con.commit()
+                print (q_id)
+            except Exception as e:
+                print (e)
+                print (line)
+                break
+        f.close()
 
 if __name__ == "__main__":
     j = SquadDb()
-    j.connect_db()
-    j.update_wh()
+    j.connect_db2()
+    j.update_dup()

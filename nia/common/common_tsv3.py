@@ -39,7 +39,8 @@ class Abc():
                 context = item[5]
 
                 answer_s = context.find(answer)
-                logger.info("answer_s: %s" % answer_s)
+                logger.info("answer: '%s'" % answer)
+                logger.info
                 answer_e = answer_s + len(answer)
                 extract_answer = context[answer_s:answer_e]
                 self.number += 1
