@@ -64,7 +64,24 @@ class SquadDb(SquadDbSuper):
         except:
             print ("no select_data")
 
+    def select_data3(self):
+        f = open("/home/msl/ys/cute/nia/sw_req.txt" ,"w")
+        result = []
+        try:
+            fetch_sql_qa = "SELECT question, answer, reason " \
+                           "FROM all_qna " \
+                           "where q_id like 'm4%-1'"
+            self.cur.execute(fetch_sql_qa)
+            for row in self.cur.fetchall():
+                result.append("\t".join([str(row[0]), str(row[1]), str(row[2])]))
+            for d in result:
+                f.write(d)
+                f.write("\n")
+
+        except:
+            print ("no select_data")
+
 if __name__ == "__main__":
     j = SquadDb()
     j.connect_db2()
-    j.select_data2()
+    j.select_data3()
