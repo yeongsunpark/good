@@ -102,13 +102,13 @@ class NLPAnalyzer:
         message_result = stub.Analyze(in_text)
 
         morp_result = list()
-        for i in range(len(message_result.sentences)):
+        for i in range(len(message_result.sentences)):  # 찬란하/VA ㄴ/ETM 유산/NNG ,/SP 시티헌터/NNG ,/SP 주군/NNG 의/JKG 태양/NNG ,/SP 닥터/NNG 이방/NNG 이/VCP ㄴ/ETM 등/NNB
             morp_analysis = message_result.sentences[i].morps
             morp = ""
             for j in range(len(morp_analysis)):
                 morp = morp + " " + morp_analysis[j].lemma + "/" + morp_analysis[j].type
             morp = morp.encode('utf-8').strip()
-            morp_result.append(morp)
+            morp_result.append(morp)  # 찬란하/VA ㄴ/ETM 유산/NNG ,/SP 시티헌터/NNG ,/SP 주군/NNG 의/JKG 태양/NNG ,/SP 닥터/NNG 이방/NNG 이/VCP ㄴ/ETM 등/NNB
 
         return morp_result
 
@@ -241,13 +241,13 @@ class NLPAnalyzer:
 
     def get_result_morp_list(self, text):
         return_list = list()
-        for temp in self.__extract_morp__(text):
+        for temp in self.__extract_morp__(text):  # 찬란하/VA ㄴ/ETM 유산/NNG ,/SP 시티헌터/NNG ,/SP 주군/NNG 의/JKG 태양/NNG ,/SP 닥터/NNG 이방/NNG 이/VCP ㄴ/ETM 등/NNB
             tokens = temp.decode('utf-8').split()
-            for token in tokens:
+            for token in tokens:  # 찬란하/VA
                 item = token.split("/")
                 if len(item) > 2:
                     item = ["/"] + [item[-1]]
-                return_list.append("/".join([item[0], item[1].lower()]))
+                return_list.append("/".join([item[0], item[1].lower()]))  # ['찬란하/va']
         return return_list
 
     def get_result_morp_str(self, text):
@@ -280,14 +280,14 @@ class NLPAnalyzer:
                     original_sent.append(word.text)
                 original_sent_list.append(" ".join(original_sent))
             sent_list = list()
-            for morph in sent.morph_evals:
-                tokens = morph.result.replace("+", "\t").replace("\t/SW", "+/SW").split("\t")
+            for morph in sent.morph_evals:  # target: 찬란한 # result: 찬란하/VA+ㄴ/ETM # m_end: 1
+                tokens = morph.result.replace("+", "\t").replace("\t/SW", "+/SW").split("\t")  # ['찬란하/VA', 'ㄴ/ETM']
                 item_list = list()
-                for token in tokens:
-                    item = token.split("/")
+                for token in tokens:  # 찬란하/VA
+                    item = token.split("/")  # ['찬란하', 'VA']
                     if len(item) > 2:
                         item = ["/"] + [item[-1]]
-                    item_list.append("/".join([item[0], item[1].lower()]))
+                    item_list.append("/".join([item[0], item[1].lower()]))  # ['찬란하/va'] # ['찬란하/va', 'ㄴ/etm']
                 sent_list.append(item_list)
             final_list.append(sent_list)
         if original_token and sentence_list:
@@ -312,11 +312,10 @@ class NLPAnalyzer:
 
 if __name__ == "__main__":
     nlp_analyze = NLPAnalyzer()
-    #content = """찬란한 유산, 시티헌터, 주군의 태양, 닥터 이방인 등"""
-    content = """MBC TV '밥상 차리는 남자'도 메인 연출자가 파업에 동참하면서 촬영이 중단됐다가 지난 14일 재개됐는데 역시 같은 이유다. '밥상 차리는 남자'는 파업 직전인 지난 2일 시작했기 때문에 파업으로 결방되면 방송을 시작하자마자 중단하는 꼴이 된다. 드라마로서는 첫 방송이 연기되는 것보다 방송 도중 결방되는 게 더 큰 타격이다. 흐름이 끊겨버려 안 하느니만 못한
- 상황이 되기 때문이다. 그로 인해 메인 연출자의 파업 참여 부담이 더 커진다. 반면 예능 프로그램의 경우는 애초 출연자와의 출연 계약 기간이라는 것이 없어 파업으로 결방돼도 계약상 문제가 >발생하는 경우가 거의 없고, 내용도 드라마처럼 연속성이 있는 게 아니라 결방의 부담이 드라마에 비해서는 현저히 적다. MBC노조 관계자는 "아직 확정적으로 말하긴 힘들지만 앞으로 시작하는 드>라마의 경우는 대부분 제때 방송을 시작하기 쉽지 않을 것"이라며 "프로그램마다 사정이 다 복잡한 것은 사실이지만 파업이 길어지면 계획된 일정대로 가기 어렵다"고 전했다."""
+    content = """찬란한 유산, 시티헌터, 주군의 태양, 닥터 이방인 등"""
+    # content = """MBC TV '밥상 차리는 남자'도 메인 연출자가 파업에 동참하면서 촬영이 중단됐다가 지난 14일 재개됐는데 역시 같은 이유다. '밥상 차리는 남자'는 파업 직전인 지난 2일 시작했기 때문에 파업으로 결방되면 방송을 시작하자마자 중단하는 꼴이 된다. 드라마로서는 첫 방송이 연기되는 것보다 방송 도중 결방되는 게 더 큰 타격이다. 흐름이 끊겨버려 안 하느니만 못한 상황이 되기 때문이다. 그로 인해 메인 연출자의 파업 참여 부담이 더 커진다. 반면 예능 프로그램의 경우는 애초 출연자와의 출연 계약 기간이라는 것이 없어 파업으로 결방돼도 계약상 문제가 >발생하는 경우가 거의 없고, 내용도 드라마처럼 연속성이 있는 게 아니라 결방의 부담이 드라마에 비해서는 현저히 적다. MBC노조 관계자는 "아직 확정적으로 말하긴 힘들지만 앞으로 시작하는 드>라마의 경우는 대부분 제때 방송을 시작하기 쉽지 않을 것"이라며 "프로그램마다 사정이 다 복잡한 것은 사실이지만 파업이 길어지면 계획된 일정대로 가기 어렵다"고 전했다."""
     #morp_content = nlp_analyze.get_result_morp_list(content)
-    morph_content = nlp_analyze.get_tree_result(content)
+    morph_content = nlp_analyze.get_dependency_parser_result(content)
     #dp_content = nlp_analyze.get_dependency_parser_result(content)
     print(morph_content)
     #with open("tmp.json", "w") as f:
