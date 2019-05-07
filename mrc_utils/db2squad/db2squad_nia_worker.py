@@ -33,13 +33,12 @@ class SquadDb():
         ###user_input#########################################################
         self.db_table = "SQUAD_NEWS_NIA"
         self.data_output_dir = "/home/msl/ys/cute/nia/check"
-        self.lang = "no"
-        self.version = "0506"
+        self.version = "0508"
         self.test_ratio = 0.2    # dev_ratio (8:1:1로 나누기 위해)
-        self.maximum = None
-        self.is_divide = False
         self.is_dp = False
         self.is_random = True
+        self.mode = "normal"
+        self.split = True
         #######################################################################
 
 
@@ -50,8 +49,6 @@ class SquadDb():
         self.cur = None
         self.random_end = "ORDER BY RAND()" if self.is_random else ""
         self.dp_end = "_dp" if self.is_dp else ""
-        self.context_ori = ""
-        self.processed_ctx_list = list()
 
     def easy_mysql(self, cfg_dict, encoding='utf8', autocommit=False):
         self.con = pymysql.connect(host=cfg_dict['host'], user=cfg_dict['usr'],
@@ -75,7 +72,7 @@ class SquadDb():
 
     def db2squad(self):
         # fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {};".format(self.random_end)
-        fetch_sql_ctx = "SELECT id, title, context, source FROM all_context_all where season=1 or season=2 or season=3 or season=5 or season=6 {};".format(self.random_end)
+        fetch_sql_ctx = "SELECT id, title, context, source FROM all_context_all where season=1 or season=2 or season=3 or season=6 {};".format(self.random_end)
         # fetch_sql_ctx = "SELECT CTX.id, CTX.title, CTX.context  FROM all_context as CTX INNER JOIN all_qna as QA on QA.c_id = CTX.id WHERE CTX.season = 5 and QA.question IS NOT NULL AND QA.ANSWER IS NOT NULL GROUP BY CTX.id {} ".format(self.random_end)
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
@@ -84,25 +81,29 @@ class SquadDb():
         # contexts_not_fix = [c for c in contexts if c[0] not in contexts_dev_fix_ids]  # not fix
         logger.info("len(contexts): {}".format(len(contexts)))
         # logger.info("len(contexts_dev_fix_ids): {}".format(len(contexts_dev_fix_ids))) # 없지. 
-        logger.info("len(contexts_not_fix): {}".format(len(contexts_not_fix)))  # 위에 것과 같아야함. 
+        logger.info("len(contexts_not_fix): {}".format(len(contexts_not_fix)))  # 위에 것과 같아야함.
 
-        train_cnt = math.floor((len(contexts))*(1-self.test_ratio))
-        context_train = random.sample(contexts_not_fix, train_cnt)  # 0.8은 여기
-        c_dev_tmp1 = [c for c in contexts_not_fix if c not in context_train]  # 나머지는 여기
-        # c_dev_tmp2 = list(contexts_dev_fix)  # 없음.
-        logger.info("c_dev_tmp1: {}".format(len(c_dev_tmp1)))
-        # logger.info("c_dev_tmp2: {}".format(len(c_dev_tmp2)))
-        context_dNt = c_dev_tmp1  # 0.2는 여기 (그냥 한 번 더 넣을래)
-        # context_dNt = c_dev_tmp1 + c_dev_tmp2  # 0.2는 여기
-        dNt_cnt = math.floor((len(contexts) - len(context_train)) * 0.5)  # 전체 본문 길이 - train 본문(80%) 길이 / 2 -> 10%
-        context_dev = random.sample(context_dNt, dNt_cnt)
-        context_test = [c for c in contexts if c not in context_train and c not in context_dev]
-        logger.info("train_cnt: {}".format(train_cnt))
-        logger.info("Len context_train: {}".format(len(context_train)))
-        logger.info("Len context_dev: {}".format(len(context_dev)))
-        logger.info("Len context_test: {}".format(len(context_test)))
+        if self.split :
+            train_cnt = math.floor((len(contexts)) * (1 - self.test_ratio))
+            context_train = random.sample(contexts_not_fix, train_cnt)  # 0.8은 여기
+            c_dev_tmp1 = [c for c in contexts_not_fix if c not in context_train]  # 나머지는 여기
+            # c_dev_tmp2 = list(contexts_dev_fix)  # 없음.
+            logger.info("c_dev_tmp1: {}".format(len(c_dev_tmp1)))
+            # logger.info("c_dev_tmp2: {}".format(len(c_dev_tmp2)))
+            context_dNt = c_dev_tmp1  # 0.2는 여기 (그냥 한 번 더 넣을래)
+            # context_dNt = c_dev_tmp1 + c_dev_tmp2  # 0.2는 여기
+            dNt_cnt = math.floor((len(contexts) - len(context_train)) * 0.5)  # 전체 본문 길이 - train 본문(80%) 길이 / 2 -> 10%
+            context_dev = random.sample(context_dNt, dNt_cnt)
+            context_test = [c for c in contexts if c not in context_train and c not in context_dev]
+            logger.info("train_cnt: {}".format(train_cnt))
+            logger.info("Len context_train: {}".format(len(context_train)))
+            logger.info("Len context_dev: {}".format(len(context_dev)))
+            logger.info("Len context_test: {}".format(len(context_test)))
+        else:
+            context_all = contexts
 
         for data_type in ["train", "dev", "test"]:
+        # for data_type in ["all"]:
             cnt = 0
             result = dict()
             result['version'] = self.version
@@ -122,12 +123,12 @@ class SquadDb():
                     exit()
 
                 qas_list = list()
-                fetch_sql_qa = "SELECT q_id, question, answer_start, answer, substring_index(classType,'_',2) FROM all_qna " \
-                                "WHERE c_id='{}' and q_id like '%-1'".format(context[0])
+                fetch_sql_qa = "SELECT q_id, question, answer_start, answer, classType FROM all_qna " \
+                                    "WHERE c_id='{}' and q_id not like '%-2'".format(context[0])
                 self.cur.execute(fetch_sql_qa)
                 for row in self.cur.fetchall():
                     qa = {'id': row[0], 'answers': [{'answer_start': row[2], 'text': row[3]}],
-                            'question': row[1], 'classtype':row[4]}
+                                'question': row[1], 'classtype':row[4]}
                     qas_list.append(qa)
                     cnt += 1
                 para_dict['qas'] = qas_list
