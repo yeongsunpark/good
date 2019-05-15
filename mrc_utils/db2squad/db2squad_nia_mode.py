@@ -33,11 +33,11 @@ class SquadDb():
         ###user_input#########################################################
         self.db_table = "SQUAD_NEWS_NIA"
         self.data_output_dir = "/home/msl/ys/cute/nia/check"
-        self.version = "0506"
+        self.version = "0500"
         self.test_ratio = 0.2    # dev_ratio (8:1:1로 나누기 위해)
         self.is_dp = False
         self.is_random = True
-        self.mode = "no_answer"
+        self.mode = "clue"
         self.split = False
         #######################################################################
 
@@ -131,7 +131,7 @@ class SquadDb():
                 qas_list = list()
                 if self.mode == "clue":
                     fetch_sql_qa = "SELECT q_id, question, answer_start, answer, classType, reason, reason_start_index  FROM all_qna " \
-                                    "WHERE c_id='{}'".format(context[0])
+                                    "WHERE c_id='{}' and reason != ''".format(context[0])
                 elif self.mode == "no_answer":
                     fetch_sql_qa = "SELECT q_id, question, classType FROM all_qna " \
                                     "WHERE c_id='{}'".format(context[0])
