@@ -8,7 +8,7 @@ import random
 import json
 
 
-with open("didi.json", 'r', encoding='utf-8') as f1:
+with open("/home/msl/ys/cute/nia/final/ko_nia_noanswer_squad_all.json", 'r', encoding='utf-8') as f1:
     json_data1 = json.load(f1)
     data = json_data1['data']
 
@@ -28,9 +28,15 @@ c_tmp = [c for c in data if c not in a and c not in b]
 # print (len(c_tmp))
 
 # print (type(json_data1))
+result = dict()
+result['version'] = 1
+result['creator'] = "MINDs Lab."
+result['data'] = list()
+result['data'] = b
 
-with open("d80.json", 'w', encoding='utf-8') as wf:
-    json.dump(a, wf, ensure_ascii=False, indent=2)
+with open("/home/msl/ys/good/nia/ratio/d80.json", 'w', encoding='utf-8') as wf:
+    json.dump(result, wf, ensure_ascii=False, indent=2)
+    # json.dump(b, wf, ensure_ascii=False, indent=2)
 
 """
 contexts = ["일번", "이번", "삼번", "사번", "오번", "육번", "칠번", "팔번", "구번", "십번"]
