@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Created by YeongsunPark at 2019-04-16
+# 클루 (#8) 관련
 
 import json
 import logging
@@ -80,7 +81,11 @@ class SquadDb():
 
     def db2squad(self):
         data_type = "real"
-        fetch_sql_ctx = "SELECT category_id, text, context_id FROM DATA_CONTEXT_TB WHERE status='CM'"
+        # fetch_sql_ctx = "SELECT CTX.category_id, CTX.text, CTX.context_id  FROM DATA_CONTEXT_TB as CTX INNER JOIN DATA_QA_TB as QA on QA.category_id = CTX.category_id WHERE CTX.status != 'RD' AND QA.question IS NOT NULL AND QA.ANSWER IS NOT NULL GROUP BY CTX.category_id"
+        fetch_sql_ctx = "SELECT CTX.category_id, CTX.text, CTX.context_id " \
+                        "FROM DATA_CONTEXT_TB as CTX INNER JOIN DATA_QA_TB as QA on QA.category_id = CTX.category_id " \
+                        "WHERE CTX.status = 'CM' AND QA.question IS NOT NULL AND QA.ANSWER IS NOT NULL AND QA.reason_morpheme IS NOT NULL " \
+                        "GROUP BY CTX.category_id"
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
         cnt = 0
@@ -96,19 +101,17 @@ class SquadDb():
         for context in contexts:
             qas_list = list()
             fetch_sql_qa = "SELECT category_id, qa_id, question, answer, start_index, end_index, reason_morpheme, reason_start_index, reason_end_index, class_type " \
-                           "FROM DATA_QA_TB WHERE category_id='{}' and question is not null and answer is not null and reason_morpheme is not null and class_type is not null " \
-                           "and question !='' and answer !='' and reason_morpheme !=''".format(context[0])
+                           "FROM DATA_QA_TB WHERE category_id='{}'".format(context[0])
             self.cur.execute(fetch_sql_qa)
             # print (fetch_sql_qa)
 
             for row in self.cur.fetchall():
-                if row[2] is not None and row[3] is not None and row[6] is not None and row[9] is not None:
+                if row[2] is not None and row[3] is not None and row[6] is not None and row[3] !="":
                 # if row[0:10] is not None:
                     # print (row)
                     qa = {'q_id': str(row[0]) + "_" + str(row[1]), 'answer': row[3], 'begin': row[4],
-                          'end': row[5], 'question': row[2],
-                          'reason': row[6], 'reason_start': row[7], "reason_end": row[8], "classType": row[9], "type":wh_dict[row[9]],
-                          "isFlexible":0}
+                          'end': row[5], 'question': row[2], 'reason': row[6], 'reason_start': row[7],
+                          "reason_end": row[8], "classType": row[9], "type":wh_dict[row[9]], "isFlexible":0}
                     qas_list.append(qa)
                     cnt += 1
 

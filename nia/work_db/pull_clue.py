@@ -80,9 +80,24 @@ class SquadDb():
         f2.close()
         f3.close()
 
-
+    def count_clue(self, file):
+        f = open("{}".format(file), "r")
+        count = 0
+        for data in f:
+            data = data.replace("\n", "").replace('"', "'")
+            item = data.split("\t")
+            select_sql2 = 'select count(*) from DATA_QA_TB where question = "{}" and answer = "{}" and reason_morpheme = "{}"'.format(
+                item[2], item[4], item[5])
+            self.cur.execute(select_sql2)
+            select_data_row = self.cur.fetchall()
+            self.con.commit()
+            if select_data_row[0][0] == 1:
+                count +=1
+        print (file)
+        print (count)
 
 if __name__ == "__main__":
     j = SquadDb()
     j.connect_db()
-    j.count_data()
+    #j.count_data()
+    j.count_clue(sys.argv[1])
