@@ -44,19 +44,27 @@ print (corr)
 
 # print (df.loc[:,"a":])
 """
-
 """
-X = np.array([[0, -0.5], [-1.5, -1.5], [1, 0.5], [-3.5, -2.5], [0, 1], [1, 1.5], [-2, -0.5]])
+X = np.array([[0, -0.5], [-1.5, -1.5], [1, 0.5],  # 동그라미
+              [-3.5, -2.5], [0, 1], [1, 1.5], [-2, -0.5]])  # 엑스
+print ("X:", X)
 y = np.array([1, 1, 1, 2, 2, 2, 2])
-x_new = [0, -1.5]
-plt.scatter(X[y == 1, 0], X[y == 1, 1], s=100, marker='o', c='r', label="클래스 1")
-plt.scatter(X[y == 2, 0], X[y == 2, 1], s=100, marker='x', c='b', label="클래스 2")
-plt.scatter(x_new[0], x_new[1], s=100, marker='^', c='g', label="테스트 데이터")
+print ("y:", y)
+x_new = [0, -1.5]  # 세모
+print ("x_new:", x_new)
+plt.scatter(X[y == 1, 0], X[y == 1, 1], s=100, marker='o', c='r', label="class 1")
+print ("영선아!", X[y == 1, 0])
+print ("안녕", y==1)
+print ("영선아!", X[y == 1])
+plt.scatter(X[y == 2, 0], X[y == 2, 1], s=100, marker='x', c='b', label="class 2")
+plt.scatter(x_new[0], x_new[1], s=100, marker='^', c='g', label="test data") #
 plt.xlabel("x1")
 plt.ylabel("x2")
-plt.title("이진 분류 예제 데이터")
+plt.title("binary classify sample data")
 plt.legend()
 plt.show()
+plt.savefig ("/home/msl/ys/cute/book/test_figure1.png",dpi=300)
+"""
 """
 fig = plt.figure()
 ax1 = fig.add_subplot(2, 1, 1)
@@ -70,6 +78,7 @@ ax2.bar(x, y)
 
 try:
     plt.show()
-    plt.savefig ("/home/msl/ys/good/book/test_figure1.png",dpi=300)
+    plt.savefig ("/home/msl/ys/cute/book/test_figure1.png",dpi=300)
 except:
     print ("no")
+"""

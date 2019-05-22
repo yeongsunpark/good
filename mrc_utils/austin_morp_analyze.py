@@ -21,6 +21,7 @@ from maum.common import lang_pb2
 from common.config import Config
 
 remote = "10.122.64.83:9823"
+#remote = "10.122.64.73:9823"
 channel = grpc.insecure_channel(remote)
 stub = nlp_pb2_grpc.NaturalLanguageProcessingServiceStub(channel)
 
@@ -291,6 +292,25 @@ class NLPAnalyzer:
                         item = ["/"] + [item[-1]]
                     item_list.append("/".join([item[0], item[1].lower()]))  # ['찬란하/va'] # ['찬란하/va', 'ㄴ/etm']
                 sent_list.append(item_list)
+
+            dependency_result = sent.dependency_parsers
+
+            for j in range(len(dependency_result)):
+                dependency_dict = dict()
+                dependency_dict["id"] = dependency_result[j].seq
+                dependency_dict["text"] = dependency_result[j].text
+                dependency_dict["head"] = dependency_result[j].head
+                dependency_dict["label"] = dependency_result[j].label
+                dependency_dict["weight"] = dependency_result[j].weight
+                if len(dependency_result[j].mods) == 0:
+                    dependency_dict["mods"] = list()
+                else:
+                    mods_list = list()
+                    for k in range(len(dependency_result[j].mods)):
+                        mods_list.append(dependency_result[j].mods[k])
+                    dependency_dict["mods"] = mods_list
+                sent_list.append(dependency_dict)
+
             final_list.append(sent_list)
         if original_token and sentence_list:
             return final_list, word_list, original_sent_list
@@ -315,13 +335,28 @@ class NLPAnalyzer:
 if __name__ == "__main__":
     nlp_analyze = NLPAnalyzer()
 
-    content = """사립학교법인이 해산되는 경우들을 알려줘"""
+    #content = """사립학교법인이 해산되는 경우들을 알려줘"""
+    content = """공군은 여러 종류의 항공기를 보유한다."""
     # content = """MBC TV '밥상 차리는 남자'도 메인 연출자가 파업에 동참하면서 촬영이 중단됐다가 지난 14일 재개됐는데 역시 같은 이유다. '밥상 차리는 남자'는 파업 직전인 지난 2일 시작했기 때문에 파업으로 결방되면 방송을 시작하자마자 중단하는 꼴이 된다. 드라마로서는 첫 방송이 연기되는 것보다 방송 도중 결방되는 게 더 큰 타격이다. 흐름이 끊겨버려 안 하느니만 못한 상황이 되기 때문이다. 그로 인해 메인 연출자의 파업 참여 부담이 더 커진다. 반면 예능 프로그램의 경우는 애초 출연자와의 출연 계약 기간이라는 것이 없어 파업으로 결방돼도 계약상 문제가 >발생하는 경우가 거의 없고, 내용도 드라마처럼 연속성이 있는 게 아니라 결방의 부담이 드라마에 비해서는 현저히 적다. MBC노조 관계자는 "아직 확정적으로 말하긴 힘들지만 앞으로 시작하는 드>라마의 경우는 대부분 제때 방송을 시작하기 쉽지 않을 것"이라며 "프로그램마다 사정이 다 복잡한 것은 사실이지만 파업이 길어지면 계획된 일정대로 가기 어렵다"고 전했다."""
     morph_content = nlp_analyze.get_result_morp_list(content)
+    #for data in morph_content:
+    #    print (data)
     # morph_content = nlp_analyze.get_dependency_parser_result(content)
-    dp_content = nlp_analyze.get_dependency_parser_result(content)
+    #dp_content = nlp_analyze.get_dependency_parser_result(content)
+    #print (dp_content)
+    #all_content = nlp_analyze.get_tree_result(content)
     all_content = nlp_analyze.get_all_result(content)
-    print (all_content)
+    jsonResult = json_format.MessageToJson(all_content, True)
+    jobj = json.loads(jsonResult)
+    print(json.dumps(jobj, encoding='utf-8', ensure_ascii=False, indent=4))
+
+    #for s in all_content.sentences:
+        #m_list = s.morps
+        #print(json.dumps(s, ensure_ascii=False))
+        #for m in m_list:
+            #print (m.keys())
+        
+    #print (all_content)
 
     # for m in morph_content:
         # a = ""

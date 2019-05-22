@@ -21,7 +21,8 @@ logging.basicConfig(filename='%s/example.log'%input_dir,level=logging.INFO,
 
 revision = re.compile(  # '<개정 *\d+[.] *\d+[.] *\d+[.][,] *\d+[.] *\d+[.] \d*[.]>|'
     '<개정( *\d+[.] *\d+[.] *\d+[.][,])+ *\d+[.] *\d+[.] \d*[.]*>|'
-    '<(개정|신설) *\d+[.] *\d+[.] *\d+[.]([,] *\d+[.] *\d+[.] *\d+[.])*>|'
+    # '<(개정|신설) *\d+[.] *\d+[.] *\d+[.]([,] *\d+[.] *\d+[.] *\d+[.])*>|'
+    '<(개정|신설) *\d+[.] *\d+[.] *\d+[.]*([,] *\d+[.] *\d+[.] *\d+[.])*>|'
     '[[](전문개정|제목개정|본조신설) *\d+[.] *\d+[.] * \d+[.]]|'
     '[[]시행일 *[:] *\d+[.] *\d+[.] *\d+[.]*]|'
     '[[]제\d+조(의\d)*에서 이동.*]|'
@@ -32,10 +33,13 @@ revision = re.compile(  # '<개정 *\d+[.] *\d+[.] *\d+[.][,] *\d+[.] *\d+[.] \d
     '제\d*조부터 제\d조*까지 생략|'  # 9/17 add
     '(제\d조[(]시행일[) ])*이 법은 (.)*부터 시행한다[.].*|'  # 9/17 add
     '. 삭제 *<\d+[.]* \d+[.]* \d+[.]>|'
+    '. 삭제 *<\d+[.]*\d+[.]*\d+[.]*>|'
     '[[]\d+[.] *\d+[.] *\d+[.] *법률 제\d+.*삭제함.]|'
     '[[]법률 제\d+호[(]\d+[.] *\d+[.] *\d+[.][)].*규정에 의하여 .*\d일까지 유효함]|'
     '<단서 생략>|'
-    '<개정 *\d+[.] *\d+[.] *\d+>')
+    '<개정 *\d+[.] *\d+[.] *\d+>|'
+    # '<개정 *\d+[.] *\d+[.] *\d+, *\d+[.] *\d+[.] *\d+>|'
+    '<개정( *\d+[.] *\d+[.] *\d+,)+ *\d+[.] *\d+[.] *\d+>')
 
 
 
@@ -55,9 +59,9 @@ for f in os.listdir(input_dir):
             data = data.replace("  ", "")
             data = data.replace("]},]}", "]}]}")
 
-        with open((os.path.join(input_dir, "output/{}_result.json").format(f.split(".")[0])), "w") as f2:
-            f2.write(data)
-            logger.info("save file: %s" % f)
+        # with open((os.path.join(input_dir, "output/{}_result.json").format(f.split(".")[0])), "w") as f2:
+            # f2.write(data)
+            # logger.info("save file: %s" % f)
         # os.system("mv {input_dir}/{file} {input_dir}/used/".format(input_dir=input_dir, file=f))
 
         with open((os.path.join(input_dir, "output/{}_pretty_result.json").format(f.split(".")[0])), "w") as f3:
@@ -81,19 +85,27 @@ for f in os.listdir(input_dir):
             """
             result = dict()
             result['0'] = list()
-            print (result)
-            data_dict = json.loads(data)
-            for d in data_dict:
-                for i in range(len(data_dict[d])):
-                    new_words = ""
-                    for item in data_dict[d][i]['조내용']:
-                        if revision.search(item):
-                            new = revision.sub("", item)
-                            new_words+= new
-                        else:
-                            new_words+= item
-                        data_dict[d][i]['조내용'] = new_words
-                    if len(new_words) >= 50:
-                        result['0'].append(data_dict[d][i])
-                data_dict = json.dumps(result, ensure_ascii=False, indent = 2)
-                f3.write(data_dict)
+            # print (result)
+            try:
+                data_dict = json.loads(data)
+                for d in data_dict:
+                    for i in range(len(data_dict[d])):
+                        new_words = ""
+                        for item in data_dict[d][i]['조내용']:
+                            if revision.search(item):
+                                new = revision.sub("", item)
+                                new_words += new
+                            else:
+                                new_words += item
+                            data_dict[d][i]['조내용'] = new_words.strip()
+                        if len(new_words) >= 50:
+                            result['0'].append(data_dict[d][i])
+                    data_dict = json.dumps(result, ensure_ascii=False, indent=2)
+                    if data_dict != "":
+                        f3.write(data_dict)
+            except:
+                print (f)
+
+
+# find ./* -size -13c -exec rm -rf {} \;
+# grep -c '조내용' *.json

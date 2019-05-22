@@ -1,0 +1,325 @@
+['/home/msl/maum/lib/python', '/home/msl/ys/good/mrc_utils', '/usr/lib/python2.7/site-packages/setuptools-14.0-py2.7.egg', '/usr/lib/python2.7/site-packages/BeautifulSoup-3.2.1-py2.7.egg', '/usr/lib/python2.7/site-packages/bs4-0.0.1-py2.7.egg', '/usr/lib/python2.7/site-packages/beautifulsoup4-4.6.3-py2.7.egg', '/usr/lib64/python27.zip', '/usr/lib64/python2.7', '/usr/lib64/python2.7/plat-linux2', '/usr/lib64/python2.7/lib-tk', '/usr/lib64/python2.7/lib-old', '/usr/lib64/python2.7/lib-dynload', '/home/msl/.local/lib/python2.7/site-packages', '/home/msl/maum/lib/python', '/usr/lib64/python2.7/site-packages', '/usr/lib64/python2.7/site-packages/gtk-2.0', '/usr/lib/python2.7/site-packages', '/home/msl/ys/good/mrc_utils../lib/python']
+sentences {
+  text: "\354\202\254\353\246\275\355\225\231\352\265\220\353\262\225\354\235\270\354\235\264 \355\225\264\354\202\260\353\220\230\353\212\224 \352\262\275\354\232\260\353\223\244\354\235\204 \354\225\214\353\240\244\354\244\230"
+  words {
+    text: "\354\202\254\353\246\275\355\225\231\352\265\220\353\262\225\354\235\270\354\235\264"
+    end: 3
+  }
+  words {
+    seq: 1
+    text: "\355\225\264\354\202\260\353\220\230\353\212\224"
+    begin: 4
+    end: 6
+  }
+  words {
+    seq: 2
+    text: "\352\262\275\354\232\260\353\223\244\354\235\204"
+    begin: 7
+    end: 9
+  }
+  words {
+    seq: 3
+    text: "\354\225\214\353\240\244\354\244\230"
+    begin: 10
+    end: 13
+  }
+  morps {
+    lemma: "\354\202\254\353\246\275"
+    type: "NNG"
+    weight: 0.436728480702
+  }
+  morps {
+    seq: 1
+    lemma: "\355\225\231\352\265\220"
+    type: "NNG"
+    position: 6
+    weight: 0.184768788063
+  }
+  morps {
+    seq: 2
+    lemma: "\353\262\225\354\235\270"
+    type: "NNG"
+    position: 12
+    weight: 0.184465181605
+  }
+  morps {
+    seq: 3
+    lemma: "\354\235\264"
+    type: "JKS"
+    position: 18
+    weight: 0.0360722801664
+  }
+  morps {
+    seq: 4
+    lemma: "\355\225\264\354\202\260"
+    type: "NNG"
+    position: 22
+    weight: 0.206892127681
+  }
+  morps {
+    seq: 5
+    lemma: "\353\220\230"
+    type: "XSV"
+    position: 28
+    weight: 0.000224176821412
+  }
+  morps {
+    seq: 6
+    lemma: "\353\212\224"
+    type: "ETM"
+    position: 31
+    weight: 0.238503066387
+  }
+  morps {
+    seq: 7
+    lemma: "\352\262\275\354\232\260"
+    type: "NNG"
+    position: 35
+    weight: 0.658544593624
+  }
+  morps {
+    seq: 8
+    lemma: "\353\223\244"
+    type: "XSN"
+    position: 41
+    weight: 0.0299840547671
+  }
+  morps {
+    seq: 9
+    lemma: "\354\235\204"
+    type: "JKO"
+    position: 44
+    weight: 0.0819193092259
+  }
+  morps {
+    seq: 10
+    lemma: "\354\225\214\353\246\254"
+    type: "VV"
+    position: 48
+    weight: 0.771389843503
+  }
+  morps {
+    seq: 11
+    lemma: "\354\226\264"
+    type: "EC"
+    position: 51
+    weight: 0.418310335897
+  }
+  morps {
+    seq: 12
+    lemma: "\354\243\274"
+    type: "VX"
+    position: 51
+    weight: 0.161282744221
+  }
+  morps {
+    seq: 13
+    lemma: "\354\226\264"
+    type: "EF"
+    position: 51
+    weight: 0.00572440876449
+  }
+  morph_evals {
+    target: "\354\202\254\353\246\275\355\225\231\352\265\220\353\262\225\354\235\270\354\235\264"
+    result: "\354\202\254\353\246\275\355\225\231\352\265\220\353\262\225\354\235\270/NNG+\354\235\264/JKS"
+    m_end: 3
+  }
+  morph_evals {
+    seq: 1
+    target: "\355\225\264\354\202\260\353\220\230\353\212\224"
+    result: "\355\225\264\354\202\260\353\220\230/VV+\353\212\224/ETM"
+    word_id: 1
+    m_begin: 4
+    m_end: 6
+  }
+  morph_evals {
+    seq: 2
+    target: "\352\262\275\354\232\260\353\223\244\354\235\204"
+    result: "\352\262\275\354\232\260\353\223\244/NNG+\354\235\204/JKO"
+    word_id: 2
+    m_begin: 7
+    m_end: 9
+  }
+  morph_evals {
+    seq: 3
+    target: "\354\225\214\353\240\244\354\244\230"
+    result: "\354\225\214\353\246\254/VV+\354\226\264/EC+\354\243\274/VX+\354\226\264/EF"
+    word_id: 3
+    m_begin: 10
+    m_end: 13
+  }
+  wsds {
+    text: "\354\202\254\353\246\275"
+    type: "NNG"
+    scode: "00"
+  }
+  wsds {
+    seq: 1
+    text: "\355\225\231\352\265\220"
+    type: "NNG"
+    scode: "00"
+    position: 6
+    begin: 1
+    end: 1
+  }
+  wsds {
+    seq: 2
+    text: "\353\262\225\354\235\270"
+    type: "NNG"
+    scode: "00"
+    position: 12
+    begin: 2
+    end: 2
+  }
+  wsds {
+    seq: 3
+    text: "\354\235\264"
+    type: "JKS"
+    scode: "00"
+    weight: 1.0
+    position: 18
+    begin: 3
+    end: 3
+  }
+  wsds {
+    seq: 4
+    text: "\355\225\264\354\202\260"
+    type: "NNG"
+    scode: "00"
+    position: 22
+    begin: 4
+    end: 4
+  }
+  wsds {
+    seq: 5
+    text: "\353\220\230"
+    type: "XSV"
+    scode: "00"
+    position: 28
+    begin: 5
+    end: 5
+  }
+  wsds {
+    seq: 6
+    text: "\353\212\224"
+    type: "ETM"
+    scode: "00"
+    weight: 1.0
+    position: 31
+    begin: 6
+    end: 6
+  }
+  wsds {
+    seq: 7
+    text: "\352\262\275\354\232\260"
+    type: "NNG"
+    scode: "00"
+    position: 35
+    begin: 7
+    end: 7
+  }
+  wsds {
+    seq: 8
+    text: "\353\223\244"
+    type: "XSN"
+    scode: "00"
+    position: 41
+    begin: 8
+    end: 8
+  }
+  wsds {
+    seq: 9
+    text: "\354\235\204"
+    type: "JKO"
+    scode: "00"
+    weight: 1.0
+    position: 44
+    begin: 9
+    end: 9
+  }
+  wsds {
+    seq: 10
+    text: "\354\225\214\353\246\254"
+    type: "VV"
+    scode: "00"
+    position: 48
+    begin: 10
+    end: 10
+  }
+  wsds {
+    seq: 11
+    text: "\354\226\264"
+    type: "EC"
+    scode: "00"
+    weight: 1.0
+    position: 51
+    begin: 11
+    end: 11
+  }
+  wsds {
+    seq: 12
+    text: "\354\243\274"
+    type: "VX"
+    scode: "00"
+    position: 51
+    begin: 12
+    end: 12
+  }
+  wsds {
+    seq: 13
+    text: "\354\226\264"
+    type: "EF"
+    scode: "00"
+    weight: 1.0
+    position: 51
+    begin: 13
+    end: 13
+  }
+  dependency_parsers {
+    text: "\354\202\254\353\246\275\355\225\231\352\265\220\353\262\225\354\235\270\354\235\264"
+    head: 1
+    label: "NP_SBJ"
+    weight: 0.69690059442
+  }
+  dependency_parsers {
+    seq: 1
+    text: "\355\225\264\354\202\260\353\220\230\353\212\224"
+    head: 2
+    label: "VP_MOD"
+    mods: 0
+    weight: 0.767560057996
+  }
+  dependency_parsers {
+    seq: 2
+    text: "\352\262\275\354\232\260\353\223\244\354\235\204"
+    head: 3
+    label: "NP_OBJ"
+    mods: 1
+    weight: 0.729039987817
+  }
+  dependency_parsers {
+    seq: 3
+    text: "\354\225\214\353\240\244\354\244\230"
+    head: -1
+    label: "VP"
+    mods: 2
+    weight: 0.324029432919
+  }
+  srls {
+    verb: "\355\225\264\354\202\260"
+    word_id: 1
+  }
+  srls {
+    verb: "\354\225\214\353\246\254"
+    word_id: 3
+    weight: 0.269917640633
+  }
+  zas {
+    verb_wid: 3
+    ant_sid: -1
+    ant_wid: -1
+    type: "s"
+    weight: 0.993443026499
+  }
+}
+
