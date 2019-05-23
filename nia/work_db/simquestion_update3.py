@@ -37,7 +37,7 @@ class SquadDb():
             pass
     def update_data(self):
         cate_dict = {"정치": 1, "경제": 2, "사회": 3, "생활": 4, "IT/과학": 5, "연예": 6, "스포츠":7, "문화":8, "미용/건강":9}
-        f = open("/home/msl/ys/cute/nia/sim/유사질문 생성 시트 - 원지연.tsv" ,"r")
+        f = open("/home/msl/ys/cute/nia/sim/유사질문 생성 시트 - 임송이.tsv" ,"r")
         for line in f:
             line = line.replace("\n","")
             item = line.split("\t")

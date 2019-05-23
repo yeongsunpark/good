@@ -31,9 +31,11 @@ class SquadDb():
         except Exception as e:
             pass
     def select_data(self):
-        f = open("/home/msl/ys/cute/nia/check/no_simquestion.txt" ,"w")
+        f = open("/home/msl/ys/cute/nia/check/no_simquestion0523.txt" ,"w")
         try:
-            fetch_sql_qa = "select c_id, q_id, question, answer, reason from all_qna where q_id in (select q_id from all_qna where q_id like 'm4%' group by substring_index(q_id, '-', 1) having count(*) = 1);"
+            fetch_sql_qa = "select c_id, q_id, question, answer, reason " \
+                           "from all_qna_error " \
+                           "where q_id in (select q_id from all_qna_error where q_id like 'm6%' group by substring_index(q_id, '-', 1) having count(*) = 1);"
 
             # 22929".format(context[0])
             self.cur.execute(fetch_sql_qa)

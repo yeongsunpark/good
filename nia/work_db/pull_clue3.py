@@ -37,7 +37,7 @@ class SquadDb():
         self.db_table = "MRC_TRAIN"
         self.data_output_dir = "/home/msl/ys/cute/nia/check"
         self.lang = "kor"
-        self.version = "0514"
+        self.version = "0523"
         self.test_ratio = 0.1    # dev_ratio
         self.maximum = None
         self.is_divide = False
@@ -88,7 +88,7 @@ class SquadDb():
         result['version'] = self.version
         result['creator'] = "MINDs Lab."
         result['data'] = list()
-        wh_dict = {"work_who": 0, "work_when": 1, "work_where": 2, "work_what": 3, "work_how": 4, "work_why": 5, "": ""}
+        wh_dict = {"work_who": 0, "work_when": 1, "work_where": 2, "work_what": 3, "work_how": 4, "work_why": 5, "": "", None:""}
         i = 1
 
         logger.info("start..")
@@ -96,13 +96,13 @@ class SquadDb():
         for context in contexts:
             qas_list = list()
             fetch_sql_qa = "SELECT category_id, qa_id, question, answer, start_index, end_index, reason_morpheme, reason_start_index, reason_end_index, class_type " \
-                           "FROM DATA_QA_TB WHERE category_id='{}' and question is not null and answer is not null and reason_morpheme is not null and class_type is not null " \
+                           "FROM DATA_QA_TB WHERE category_id='{}' and question is not null and answer is not null and reason_morpheme is not null " \
                            "and question !='' and answer !='' and reason_morpheme !=''".format(context[0])
             self.cur.execute(fetch_sql_qa)
             # print (fetch_sql_qa)
 
             for row in self.cur.fetchall():
-                if row[2] is not None and row[3] is not None and row[6] is not None and row[9] is not None:
+                if row[2] is not None and row[3] is not None and row[6] is not None:
                 # if row[0:10] is not None:
                     # print (row)
                     qa = {'q_id': str(row[0]) + "_" + str(row[1]), 'answer': row[3], 'begin': row[4],
