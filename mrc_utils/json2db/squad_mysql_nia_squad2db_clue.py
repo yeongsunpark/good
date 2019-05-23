@@ -94,7 +94,7 @@ class SquadDb():
                 var_tuple_ctx = (start_id, season, data_type, str(title).strip(), q_context, source, doc_type, sub_doc_type, fileName, seq)
 
                 # var_tuple_ctx_ori = (start_id, season, data_type, title.strip(), self.context_ori.strip())
-                self.insert_data(table="all_context", value_part=self.context_table, var_tuple=var_tuple_ctx, morph_end="")
+                self.insert_data(table="all_context_error", value_part=self.context_table, var_tuple=var_tuple_ctx, morph_end="")
                 # self.insert_data(table="all_context_ori", value_part=self.context_table, var_tuple=var_tuple_ctx_ori, morph_end="")
             except KeyError:
                 exit("something wrong")
@@ -114,7 +114,7 @@ class SquadDb():
                 reason_end_i = qa ['reason_end']
                 ### var_tuple_qa = (start_id, q_id, q.strip(), begin, end, answer.strip(), numType, classType, isf) # q_id 를 i+1 로 표현해서 본문 시작할 때마다 1로 했다가 바꿈!
                 var_tuple_qa = (start_id, q_id, q.strip(), begin, end, answer, numType, classType, isf, reason, reason_start_i, reason_end_i) # q_id 를 i+1 로 표현해서 본문 시작할 때마다 1로 했다가 바꿈!
-                self.insert_data(table="all_qna", value_part=self.qna_table, var_tuple=var_tuple_qa, morph_end="")
+                self.insert_data(table="all_qna_error", value_part=self.qna_table, var_tuple=var_tuple_qa, morph_end="")
                 q_id_index +=1
             start_id += 1
         # logger.debug("num of para: %i" % len(d['paragraphs']))
@@ -135,13 +135,13 @@ if __name__ == "__main__":
         q_id_index = sys.argv[7] # 수정하기! (1)
         """
         mode = "squad2db"
-        season = "5"  # 수정하기!
+        season = "8"  # 수정하기!
         db_table = "SQUAD_NEWS_NIA"
-        json_input = "/home/msl/ys/cute/nia/check/ko_nia_v1_squad_real.json"
-        start_id = 48698  # 수정하기! 1(context_id)
+        json_input = "/home/msl/ys/cute/nia/check/ko_nia_v0523_squad_real.json"
+        start_id = 93697  # 수정하기! 1(context_id)
         data_type = "news"
-        creator = "m4"  # 수정하기!
-        q_id_index = 257241  # 수정하기! (1)(q_id)
+        creator = "m6"  # 수정하기!
+        q_id_index = 407699  # 수정하기! (1)(q_id)
         #  select max(abs(substring_index(substring_index(q_id, "_",-1), "-",1))) from all_qna; 이거에 +1 하기!
         # select count(*) from all_qna 이거에 +1 해도 똑같네 ㅋㅋㅋ
     except: print("")
