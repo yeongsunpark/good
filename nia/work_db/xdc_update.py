@@ -97,7 +97,24 @@ class SquadDb(SquadDbSuper):
                 break
         f.close()
 
+    def update_source(self):
+        fetch_sql_ctx = "select id, context from all_context_error"
+        self.cur.execute(fetch_sql_ctx)
+        contexts = self.cur.fetchall()   # entire
+
+        for context in contexts:
+            try:
+                update_source = "update all_context_error set source = (select source from all_context where context = '{}') "\
+                                "where context = '{}'".format(context[1], context[1])
+                self.cur.execute(update_source)
+                self.con.commit()
+            except Exception as e:
+                print (e)
+                print (update_source)
+                print (context[1])
+                break
+
 if __name__ == "__main__":
     j = SquadDb()
     j.connect_db2()
-    j.update_dup()
+    j.update_source()
