@@ -37,11 +37,13 @@ class SquadDb():
             pass
     def update_data(self):
         cate_dict = {"정치": 1, "경제": 2, "사회": 3, "생활": 4, "IT/과학": 5, "연예": 6, "스포츠":7, "문화":8, "미용/건강":9}
-        f = open("/home/msl/ys/cute/nia/sim/유사질문 생성 시트 - 원지연.tsv" ,"r")
+        f = open("/home/msl/ys/cute/nia/sim/유사질문 생성 시트 - 전효진_2.tsv" ,"r")
         for line in f:
             line = line.replace("\n","")
             item = line.split("\t")
 
+            c_id = item[0]
+            q_id = item[1]
             question = item[2]
             # print (question)
             s_question = item[3]
@@ -52,12 +54,15 @@ class SquadDb():
                 try:
                     insert_sql = "insert into `all_qna_error` (c_id, q_id, question, answer_start, answer_end, answer, numType, classType, isFlexible, reason, reason_start_index, reason_end_index) " \
                                  "select c_id, concat(substring_index(q_id,'-',1), '-2'), %s, answer_start, answer_end, answer, numType, classType, isFlexible, reason, reason_start_index, reason_end_index " \
-                                 "from `all_qna_error` where question = %s and answer = %s"
-                    self.cur.execute(insert_sql, (s_question, question, answer))
+                                 "from `all_qna_error` where c_id = %s and q_id = %s"
+                                 # "from `all_qna_error` where question = %s and answer = %s and c_id = %s and q_id = %s and reason = %s"
+                    self.cur.execute(insert_sql, (s_question, c_id, q_id))
+                    # self.cur.execute(insert_sql, (s_question, question, answer, c_id, q_id, clue))
                     self.con.commit()
                     # print (item[0])
                 except:
                     pass
+                    # print (item)
                     # break
 
 if __name__ == "__main__":
