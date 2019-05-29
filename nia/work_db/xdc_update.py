@@ -98,14 +98,14 @@ class SquadDb(SquadDbSuper):
         f.close()
 
     def update_source(self):
-        fetch_sql_ctx = "select id, context from all_context_error"
+        fetch_sql_ctx = "select id, context from all_context_error where id >=108130"
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
 
         for context in contexts:
             try:
-                update_source = "update all_context_error set source = (select source from all_context where context = '{}') "\
-                                "where context = '{}'".format(context[1], context[1])
+                update_source = "update all_context_error set source = (select source from all_context where context = '{}' limit 1) "\
+                                "where context = '{}' ".format(context[1], context[1])
                 self.cur.execute(update_source)
                 self.con.commit()
             except Exception as e:

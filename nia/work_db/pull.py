@@ -98,7 +98,24 @@ class SquadDb(SquadDbSuper):
         except:
             print ("no select_data")
 
+    def select_data5(self):
+        f = open("/home/msl/ys/cute/nia/text/no_source28.txt" ,"w")
+        result = []
+        try:
+            fetch_sql_qa = "SELECT id, context " \
+                           "FROM all_context_error " \
+                           "where source = 0 "
+            self.cur.execute(fetch_sql_qa)
+            for row in self.cur.fetchall():
+                result.append("\t".join([str(row[0]), str(row[1])]))
+            for d in result:
+                f.write(d)
+                f.write("\n")
+
+        except:
+            print ("no select_data")
+
 if __name__ == "__main__":
     j = SquadDb()
     j.connect_db2()
-    j.select_data4()
+    j.select_data5()
