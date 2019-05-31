@@ -73,7 +73,7 @@ class SquadDb():
     def db2squad(self):
         # fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {};".format(self.random_end)
         if self.mode == "clue":
-            fetch_sql_ctx = "SELECT id, title, context, source FROM all_context_all where season=5 {};".format(self.random_end)
+            fetch_sql_ctx = "SELECT id, title, context, source FROM all_context_error {};".format(self.random_end)
         elif self.mode == "no_answer":
             fetch_sql_ctx = "SELECT id, title, context, source FROM all_context_all where season=4 or season = 7 {};".format(
                 self.random_end)
@@ -130,8 +130,8 @@ class SquadDb():
 
                 qas_list = list()
                 if self.mode == "clue":
-                    fetch_sql_qa = "SELECT q_id, question, answer_start, answer, classType, reason, reason_start_index  FROM all_qna " \
-                                    "WHERE c_id='{}' and reason != ''".format(context[0])
+                    fetch_sql_qa = "SELECT q_id, question, answer_start, answer, classType, reason, reason_start_index  FROM all_qna_error " \
+                                    "WHERE c_id='{}'".format(context[0])
                 elif self.mode == "no_answer":
                     fetch_sql_qa = "SELECT q_id, question, classType FROM all_qna " \
                                     "WHERE c_id='{}'".format(context[0])
