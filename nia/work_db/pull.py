@@ -99,12 +99,12 @@ class SquadDb(SquadDbSuper):
             print ("no select_data")
 
     def select_data5(self):
-        f = open("/home/msl/ys/cute/nia/text/no_source28.txt" ,"w")
+        f = open("/home/msl/ys/cute/nia/text/eco_29.txt" ,"w")
         result = []
         try:
             fetch_sql_qa = "SELECT id, context " \
                            "FROM all_context_error " \
-                           "where source = 0 "
+                           "where source = 2 and context not like '%거래%' and context not like '%코스닥%' "
             self.cur.execute(fetch_sql_qa)
             for row in self.cur.fetchall():
                 result.append("\t".join([str(row[0]), str(row[1])]))

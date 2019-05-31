@@ -25,7 +25,7 @@ class SquadDb(SquadDbSuper):
 
     def update_data(self):
         cate_dict = {"정치": 1, "경제": 2, "사회": 3, "생활": 4, "IT/과학": 5, "연예": 6, "스포츠":7, "문화":8, "미용/건강":9}
-        f = open("/home/msl/ys/cute/nia/xdc/season7_text_com.txt" ,"r")
+        f = open("/home/msl/ys/cute/nia/text/no_source29_com.txt" ,"r")
         for line in f:
             item = self.line2item(line)
 
@@ -34,7 +34,7 @@ class SquadDb(SquadDbSuper):
             cate = cate_dict[item[2]]
 
             try:
-                update_memo_sql = "update all_context set source = %s where id = %s and context = %s"
+                update_memo_sql = "update all_context_error set source = %s where id = %s and context = %s"
                 self.cur.execute(update_memo_sql, (cate, id, context))
                 self.con.commit()
                 print (item[0])
@@ -117,4 +117,4 @@ class SquadDb(SquadDbSuper):
 if __name__ == "__main__":
     j = SquadDb()
     j.connect_db2()
-    j.update_source()
+    j.update_data()
