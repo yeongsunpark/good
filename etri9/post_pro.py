@@ -8,14 +8,20 @@ import csv
 import json
 import re
 
+json_data = open("post_pro.json", "r")
+j = json_data.read()
+j = json.loads(j)
+
+
 class PostProcessing():
     def __init__(self):
-        self.input_dir = "/home/msl/ys/cute/data/cw0530/20190523마인즈랩법률결과(파일럿374)_수정"
-        self.output_dir = "/home/msl/ys/cute/data/cw0530/result"
+        self.input_dir = j['input_dir']
+        self.output_dir = j['output_dir']
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
         self.full = True
-        self.start_id = 19000001
+        self.start_id = j['start_id']
+        self.a = j['a']
         # read_json_path = '/home/msl/data/mrc/ko_wiki3/ko_mrc_v2_squad_pretty.json'
         # write_txt_path = 'etri_wiki_20_v2_ys.tsv'
 
@@ -30,7 +36,7 @@ class PostProcessing():
             c = re.search("(?<=['])(.*)(?=['])", str(doc_key))
             d = c.group()
 
-            f2 = open(os.path.join(self.output_dir, f), 'w', encoding='utf-8', newline='')
+            f2 = open(os.path.join(self.output_dir, str(self.a)+".txt"), 'w', encoding='utf-8', newline='')
             wr = csv.writer(f2, delimiter='\t', quoting=csv.QUOTE_NONE, quotechar='')
 
             wr.writerow(["version", "", "", "", "", "MINDsLab_2019"])
@@ -94,7 +100,8 @@ class PostProcessing():
                 wr.writerow(["", "", "", "", "answer_end", answer_end])
 
             f2.close()
-            break
+            # break
+            self.a+=1
 
 if __name__ == "__main__":
     p = PostProcessing()
