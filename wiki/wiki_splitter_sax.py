@@ -5,6 +5,7 @@ from datetime import datetime
 
 import custom_logger
 
+# https://www.tutorialspoint.com/python3/python_xml_processing.htm (이거 참고)
 class WikiContentHandler(xml.sax.ContentHandler):
     def __init__(self):
         xml.sax.ContentHandler.__init__(self)
@@ -34,7 +35,7 @@ class WikiContentHandler(xml.sax.ContentHandler):
         self.var_dict["text"] = list()
 
     def startElement(self, name, attrs):
-        if name == "page":
+        if name == "page":    # name 이 <page {attrs} = "{}"> 어찌구 </page>
             #print("startElement '" + name + "'")
             self.ispage = True
         elif name == "title":
@@ -61,7 +62,7 @@ class WikiContentHandler(xml.sax.ContentHandler):
             elif self.isid is True:
                 self.var_dict["id"] = content
                 self.isid = False
-            elif self.isrevision is True:
+            elif self.isrevision is True:  # revision 이 있었다면 append 해서 붙여넣기 함.
                 if self.istext is True:
                     self.var_dict["text"].append(content)
 

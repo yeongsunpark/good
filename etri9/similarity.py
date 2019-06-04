@@ -4,13 +4,32 @@
 # Created by YeongsunPark at 2019-06-03
 
 from sklearn.feature_extraction.text import TfidfVectorizer
+from numpy import dot
+from numpy.linalg import norm
+import numpy as np
+import re
+
+def cos_sim(A, B):
+       return dot(A, B)/(norm(A)*norm(B))
+
 corpus = [
-    '''지방자치단체는 관할구역에서 취급하는 화학물질을 효율적으로 관리하고 화학물질로 발생하는 사고에 대비ㆍ대응하기 위하여 다음 각 호>의 사항을 조례로 정할 수 있다.1. 화학물질 안전관리 및 화학사고 대비ㆍ대응을 위한 계획 또는 시책의 수립ㆍ시행2. 화학물질의 관리에 관한 중요 사항을 심의하고 자문하기 위한
- 위원회의 구성ㆍ운영3. 화학물질 관련 정보의 제공4. 화학물질의 안전관리에 필요한 행정 및 재정 지원5. 그 밖에 화학물질 안전관리 및 화학사고 대비ㆍ대응을 위하여 필요한 사항''',
-    '흉부 엑스선 사진의 경우 진폐의 예방과 진폐근로자의 보호 등에 관한 법률에 의거해 의료 관계 법령에 따라 건강진단기관이 보관하고 있는 동안은 누가 보관하고 있는 것으로 여기는가',
-    '진폐의 예방과 진폐근로자의 보호 등에 관한 법률에 의하면 흉부 엑스선 사진의 경우 의료 관계 법령에 따라 건강진단기관이 보존하고 있는 동안은 누가 보존하고 있는 것으로 간주하는가',
-    '진폐의 예방과 진폐근로자의 보호 등에 관한 법률에 의하면 흉부 엑스선 사진의 경우 의료 관계 법령에 따라 건강진단기관이 보존하고 있는 동안은 누가 보존하고 있는 것으로 보는가',
+    '''만들 목적''',
+    '''만들''',
+    '''만들 목적''',
+    '''목적 만들''',
 ]
+
 tfidfv = TfidfVectorizer().fit(corpus)
 print(tfidfv.transform(corpus).toarray())
 print(tfidfv.vocabulary_)
+
+
+print (type(corpus[0]))
+context = np.array(tfidfv.transform(corpus).toarray()[0])
+q1 = np.array(tfidfv.transform(corpus).toarray()[1])  # 상
+q2 = np.array(tfidfv.transform(corpus).toarray()[2])
+q3 = np.array(tfidfv.transform(corpus).toarray()[3])
+
+print (cos_sim(context, q1))
+print (cos_sim(context, q2))
+print (cos_sim(context, q3))

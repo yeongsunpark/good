@@ -3,26 +3,77 @@
 
 # Created by YeongsunPark at 2019-06-03
 
-context = ['제/xpn', '1/sn', '조/nnb', '(/ss', '목적/nng', ')/ss', '이/mm', '법/nng', '은/jx', '희귀/nng', '질환/nng', '의/jkg', '예방/nng', ',/sp', '진료/nng', '및/maj', '연구/nng', '등/nnb', '에/jkb', '관/nng', '하/xsv', 'ㄴ/etm', '정책/nng', '을/jko', '종합/nng', '적/xsn', '으로/jkb', '수립/nng', 'ㆍ/sp', '시행/nng', '하/xsv', '어/ec', '희귀/nng', '질환/nng', '으로/jkb', '인/nng', '하/xsv', 'ㄴ/etm', '개인/nng', '적/xsn', 'ㆍ/sp', '사회적/nng', '부담/nng', '을/jko', '감소/nng', '시키/xsv', '고/ec', ',/sp', '국민/nng', '의/jkg', '건강/nng', '증진/nng', '및/maj', '복지/nng', '향상/nng', '에/jkb', '이바지/nng', '하/xsv', '는/etm', '것/nnb', '을/jko', '목적/nng', '으로/jkb', '하/vv', 'ㄴ다/ef', './sf']
+import os, sys
+import json
+import re
 
-q1 = ['희귀/nng', '질환법/nng', '의/jkg', '목적/nng', '이/jks', '뭐/np', '이/vcp', '야/ef', '?/sf']
-q2 = ['희귀/nng', '질환법/nng', '이/jks', '만들/vv', '어/ec', '지/vx', 'ㄴ/etm', '목적/nng', '이/jks', '뭐/np', '이/vcp', '야/ef', '?/sf']
-q3 = ['희귀/nng', '질환법/nng', '을/jko', '왜/mag', '만들/vv', '었/ep', '어/ef', '?/sf']
+sys.path.append(os.path.abspath('/home/msl/ys/good/mrc_utils'))
+from morp_analyze_my import NLPAnalyzer
 
-a = []
-for c in context:
-    if "/nn" in c or "/vv" in c:
-        a.append(c)
-q = []
-for c in q3:
-    if "/nn" in c or "/vv" in c:
-        q.append(c)
-print (a)
-print (q)
+class Sim:
+    def __init__(self):
+        self.nlp_analyze = NLPAnalyzer()
+        self.input_dir = "/home/msl/ys/cute/data/cw0530/20190531_마인즈랩법률결과_1966"
+        self.output_dir = "/home/msl/ys/cute/data/cw0530/result_morp"
 
-i = 0
-for qq in q:
-    if qq in a:
-        print (qq)
-        i +=1
-print (i/len(q))
+    def main(self):
+        f2 = open(os.path.join(self.output_dir, "recall.txt"), 'w', encoding='utf-8', newline='')
+        for f in os.listdir(self.input_dir):
+            with open(os.path.join(self.input_dir, f), 'r', encoding='utf-8') as f1:
+                doc = json.load(f1)
+            doc_key = doc.keys()
+            c = re.search("(?<=['])(.*)(?=['])", str(doc_key))
+            d = c.group()
+            # f2 = open(os.path.join(self.output_dir, f.split(".")[0] + ".txt"), 'w', encoding='utf-8', newline='')
+
+            article_content = doc[d]['조내용']
+            context_mp = self.nlp(article_content)
+            context_f = filt(context_mp)
+
+            for qa in doc[d]['qas']:
+                question = qa['question']
+                question = question.replace("\n", "")
+                level = str(qa['level']).split(" ")[2]
+                question_mp = self.nlp(question)
+                question_f = filt(question_mp)
+                # f2.write("\t".join([str(cnt(context_f, question_f)), level, "\n"]))
+                if level == "상":
+                    sang = question
+                    sang_cnt = cnt(context_f, question_f)
+                elif level == "중":
+                    joong = question
+                    joong_cnt = cnt(context_f, question_f)
+                elif level == "하":
+                    ha = question
+                    ha_cnt = cnt(context_f, question_f)
+
+            if sang_cnt <= joong_cnt <= ha_cnt:
+                continue
+            else:
+                print (f)
+                f2.write("".join([sang, "\t", str(sang_cnt), "\n", joong, "\t", str(joong_cnt), "\n", ha, "\t", str(ha_cnt), "\n"]))
+                f2.write("\n")
+        f2.close()
+
+    
+    def nlp(self, sentence):
+        processed_ans = self.nlp_analyze.get_result_morp_list(sentence)
+        return processed_ans
+
+def filt(morp):
+    a = []
+    for m in morp:
+        if "/nn" in m or "/vv" in m:
+            a.append(m)
+    return a
+
+def cnt(context, question):
+    i = 0
+    for q in question:
+        if q in context:
+            i +=1
+    return i/len(question)
+
+if __name__ == "__main__":
+    j = Sim()
+    j.main()
