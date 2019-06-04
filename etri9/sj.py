@@ -10,6 +10,7 @@ import re
 sys.path.append(os.path.abspath('/home/msl/ys/good/mrc_utils'))
 from morp_analyze_my import NLPAnalyzer
 
+
 class Sim:
     def __init__(self):
         self.nlp_analyze = NLPAnalyzer()
@@ -50,30 +51,73 @@ class Sim:
             if sang_cnt <= joong_cnt <= ha_cnt:
                 continue
             else:
-                print (f)
-                f2.write("".join([sang, "\t", str(sang_cnt), "\n", joong, "\t", str(joong_cnt), "\n", ha, "\t", str(ha_cnt), "\n"]))
+                print(f)
+                f2.write("".join(
+                    [sang, "\t", str(sang_cnt), "\n", joong, "\t", str(joong_cnt), "\n", ha, "\t", str(ha_cnt), "\n"]))
                 f2.write("\n")
         f2.close()
 
-    
+
+    def main2(self):
+        f2 = open(os.path.join(self.output_dir, "stati.txt"), 'w', encoding='utf-8', newline='')
+        for f in os.listdir(self.input_dir):
+            print (f)
+            with open(os.path.join(self.input_dir, f), 'r', encoding='utf-8') as f1:
+                doc = json.load(f1)
+            doc_key = doc.keys()
+            c = re.search("(?<=['])(.*)(?=['])", str(doc_key))
+            d = c.group()
+            # f2 = open(os.path.join(self.output_dir, f.split(".")[0] + ".txt"), 'w', encoding='utf-8', newline='')
+
+            article_content = doc[d]['조내용']
+            law_name = doc[d]['법령명']
+            context_mp = self.nlp(article_content)
+            context_f = filt(context_mp)
+
+            for qa in doc[d]['qas']:
+                question = qa['question']
+                question = question.replace("\n", "")
+                level = str(qa['level']).split(" ")[2]
+                new_question = question.replace(law_name, "")
+                question_mp = self.nlp(new_question)
+                question_f = filt(question_mp)
+                # f2.write("\t".join([str(cnt(context_f, question_f)), level, "\n"]))
+                if level == "상":
+                    sang = question
+                    sang_cnt = len(question_f)
+                elif level == "중":
+                    joong = question
+                    joong_cnt = len(question_f)
+                elif level == "하":
+                    ha = question
+                    ha_cnt = len(question_f)
+
+            f2.write("".join(
+                [sang, "\t", str(sang_cnt), "\n", joong, "\t", str(joong_cnt), "\n", ha, "\t", str(ha_cnt), "\n"]))
+            f2.write("\n")
+        f2.close()
+
     def nlp(self, sentence):
         processed_ans = self.nlp_analyze.get_result_morp_list(sentence)
         return processed_ans
+
 
 def filt(morp):
     a = []
     for m in morp:
         if "/nn" in m or "/vv" in m:
-            a.append(m)
+            a.append(m.upper())
     return a
+
 
 def cnt(context, question):
     i = 0
     for q in question:
         if q in context:
-            i +=1
-    return i/len(question)
+            i += 1
+    return i / len(question)
+
 
 if __name__ == "__main__":
     j = Sim()
-    j.main()
+    j.main2()
