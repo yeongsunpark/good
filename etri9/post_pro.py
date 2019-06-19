@@ -28,6 +28,7 @@ class PostProcessing():
     def main(self):
         for f in os.listdir(self.input_dir):
             with open(os.path.join(self.input_dir, f), 'r', encoding='utf-8') as f1:
+                print("file:", f)
                 doc = json.load(f1)
             print ("file:", f)
             doc_key = doc.keys()
