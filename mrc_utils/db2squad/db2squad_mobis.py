@@ -31,11 +31,11 @@ class SquadDb():
 
     def __init__(self):
         ###user_input#########################################################
-        self.db_table = "SQUAD_KO_ORI"
-        self.data_output_dir = "/home/msl/ys/cute/nia/check"
+        self.db_table = "SQUAD_CV"
+        self.data_output_dir = "/home/msl/ys/cute/"
         self.lang = "no"
-        self.version = "wiki"
-        self.test_ratio = 0.2    # dev_ratio (8:1:1로 나누기 위해)
+        self.version = "1"
+        self.test_ratio = 0.1    # dev_ratio (8:1:1로 나누기 위해)
         self.is_divide = False
         self.is_dp = False
         self.is_random = True
@@ -74,10 +74,11 @@ class SquadDb():
 
     def db2squad(self):
         # fetch_sql_ctx = "SELECT id, title, context, context_morph, context_dp FROM all_context_all {};".format(self.random_end)
-        fetch_sql_ctx = "SELECT id, title, context FROM all_context_all {} limit 600 ;".format(self.random_end)
+        fetch_sql_ctx = "SELECT id, title, context FROM all_context {} ;".format(self.random_end)
         # fetch_sql_ctx = "SELECT CTX.id, CTX.title, CTX.context  FROM all_context as CTX INNER JOIN all_qna as QA on QA.c_id = CTX.id WHERE CTX.season = 5 and QA.question IS NOT NULL AND QA.ANSWER IS NOT NULL GROUP BY CTX.id {} ".format(self.random_end)
         self.cur.execute(fetch_sql_ctx)
         contexts = self.cur.fetchall()   # entire
+        print (len(contexts))
 
         contexts_not_fix = [c for c in contexts]  # not fix
         # contexts_not_fix = [c for c in contexts if c[0] not in contexts_dev_fix_ids]  # not fix
@@ -147,16 +148,18 @@ class SquadDb():
                 json.dump(result, fp, ensure_ascii=False, indent=2)
             logger.info("Data dump {} finished..: len {}".format(data_type, cnt))
         """
-        for data_type in ["train"]:
-            f = open("/home/msl/ys/cute/nia/check/mobis/news.txt", "w")
+        for data_type in ["train", "test", "dev"]:
+            f = open("/home/msl/ys/cute/nia/check/mobis/news_{}.txt".format(data_type), "w")
+            cnt=0
             for context in eval("context_{}".format(data_type)):
                 title = context[1]
                 contex = context[2]
 
                 fetch_sql_qa = "SELECT q_id, question, answer_start, answer FROM all_qna " \
-                                "WHERE c_id='{}'".format(context[0])
+                                "where substring_index(c_id, '-', 1) = '{}'".format(context[0])
                 self.cur.execute(fetch_sql_qa)
                 for row in self.cur.fetchall():
+                    cnt+=1
                     id = row[0]
                     answer_start= row[2]
                     text= row[3]
@@ -164,6 +167,7 @@ class SquadDb():
                     f.write("\t".join([str(context[0]), str(title), str(contex), str(id), str(question), str(text), str(answer_start)]))
                     f.write("\n")
             f.close()
+            logger.info("Data dump {} finished..: len {}".format(data_type, cnt))
 
 
 

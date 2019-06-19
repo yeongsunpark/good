@@ -37,7 +37,7 @@ class SquadDb():
         self.test_ratio = 0.2    # dev_ratio (8:1:1로 나누기 위해)
         self.is_dp = False
         self.is_random = True
-        self.mode = "clue"
+        self.mode = "general"
         self.split = False
         #######################################################################
 
