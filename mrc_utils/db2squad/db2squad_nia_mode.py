@@ -75,12 +75,16 @@ class SquadDb():
         if self.mode == "clue":
             fetch_sql_ctx = "SELECT id, title, context, source FROM all_context_error {};".format(self.random_end)
         elif self.mode == "no_answer":
-            fetch_sql_ctx = "SELECT id, title, context, source FROM all_context_all where season=4 or season = 7 {};".format(
+            fetch_sql_ctx = "SELECT id, title, context, source FROM all_context where season=4 or season = 7 {};".format(
                 self.random_end)
         else:
-            fetch_sql_ctx = "SELECT id, title, context, source FROM all_context_all where season=1 or season=2 or season=3 or season=6 {};".format(self.random_end)
+            fetch_sql_ctx = "SELECT id, title, context, source FROM all_context where season=1 or season=2 or season=3 or season=6 {};".format(self.random_end)
         # fetch_sql_ctx = "SELECT CTX.id, CTX.title, CTX.context  FROM all_context as CTX INNER JOIN all_qna as QA on QA.c_id = CTX.id WHERE CTX.season = 5 and QA.question IS NOT NULL AND QA.ANSWER IS NOT NULL GROUP BY CTX.id {} ".format(self.random_end)
         self.cur.execute(fetch_sql_ctx)
+
+
+
+        
         contexts = self.cur.fetchall()   # entire
 
         contexts_not_fix = [c for c in contexts]  # not fix
