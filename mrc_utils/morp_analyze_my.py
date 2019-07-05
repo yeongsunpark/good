@@ -320,9 +320,6 @@ if __name__ == "__main__":
     # morph_content = nlp_analyze.get_dependency_parser_result(content)
     #dp_content = nlp_analyze.get_dependency_parser_result(content)
     print (morph_content)
-    for m in morph_content:
-        for n in m:
-            print ("+".join(n))
 
 
     #with open("tmp.json", "w") as f:
