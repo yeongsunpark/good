@@ -313,43 +313,61 @@ class NLPAnalyzer:
         ret = stub.Analyze(in_text)
         return ret
 
+    def for_line(self, ff):
+        for line in ff:
+            line = line.replace("\n", "")
+            abc = re.compile(r"\[.\]")
+            line = abc.sub("", line)
+            content = line
+            morph_content = nlp_analyze.get_tree_result(content)
+            first = list()
+            for mc in morph_content:
+                first.extend(mc)
+            second = list()
+            second.append(first)
+
+            for m in second:
+                fin = ""
+                for n in m:
+                    fin += "+".join(n)
+                    fin += " "
+                f2.write("\t".join([content, fin]))
+            f2.write("\n")
+
+    def sentence_split(self, content, original_token=True, sentence_list=True):
+        ret = self.get_all_result(content)
+        original_sent_list = list()
+        for sent in ret.sentences:
+            original_sent = list()
+            for word in sent.words:
+                original_sent.append(word.text)
+            original_sent_list.append(" ".join(original_sent))
+        return original_sent_list
+
+
 if __name__ == "__main__":
     nlp_analyze = NLPAnalyzer()
-    f = open("/home/msl/ys/cute/data/morp/dg0704.txt", "r")
-    f2 = open("/home/msl/ys/cute/data/morp/dg0704_result.txt", "w")
-    for line in f:
-        line = line.replace("\n", "")
-        abc = re.compile(r"\[.\]")
-        line = abc.sub("",line)
-        content = line
-        # content = """MBC TV '밥상 차리는 남자'도 메인 연출자가 파업에 동참하면서 촬영이 중단됐다가 지난 14일 재개됐는데 역시 같은 이유다. '밥상 차리는 남자'는 파업 직전인 지난 2일 시작했기 때문에 파업으로 결방되면 방송을 시작하자마자 중단하는 꼴이 된다. 드라마로서는 첫 방송이 연기되는 것보다 방송 도중 결방되는 게 더 큰 타격이다. 흐름이 끊겨버려 안 하느니만 못한 상황이 되기 때문이다. 그로 인해 메인 연출자의 파업 참여 부담이 더 커진다. 반면 예능 프로그램의 경우는 애초 출연자와의 출연 계약 기간이라는 것이 없어 파업으로 결방돼도 계약상 문제가 >발생하는 경우가 거의 없고, 내용도 드라마처럼 연속성이 있는 게 아니라 결방의 부담이 드라마에 비해서는 현저히 적다. MBC노조 관계자는 "아직 확정적으로 말하긴 힘들지만 앞으로 시작하는 드>라마의 경우는 대부분 제때 방송을 시작하기 쉽지 않을 것"이라며 "프로그램마다 사정이 다 복잡한 것은 사실이지만 파업이 길어지면 계획된 일정대로 가기 어렵다"고 전했다."""
-        morph_content = nlp_analyze.get_tree_result(content)
-        # print (morph_content)
-        # print (morph_content)
-        # morph_content = nlp_analyze.get_dependency_parser_result(content)
-        #dp_content = nlp_analyze.get_dependency_parser_result(content)
-        # print (morph_content)
+    f = open("/home/msl/ys/cute/data/morp/건축학개론_split.txt", "r")
+    f2 = open("/home/msl/ys/cute/data/morp/건축학개론_split_result.txt", "w")
+    typ = "nlp"
+    # typ = "split_sentence"
+    if typ == "nlp":
+        ff = f.readlines()
+        nlp_analyze.for_line(ff)
+    if typ == "split_sentence":
         first = list()
-        for mc in morph_content:
-            first.extend(mc)
-        second = list()
-        second.append(first)
-
-        for m in second:
-            fin = ""
-            for n in m:
-                fin += "+".join(n)
-                fin += " "
-            f2.write("\t".join([content, fin]))
-        f2.write("\n")
-        """    
-        for m in morph_content:
-            a = ""
-            for n in m:
-                a += "+".join(n)
-                a += " "
-            f2.write("\t".join([content, a]))
-        f2.write("\n")
-        """
+        for line in f:
+            line = line.replace("\n", "")
+            abc = re.compile(r"\[.\]")
+            line = abc.sub("", line)
+            content = line
+            split_sentences = nlp_analyze.sentence_split(content)
+            for split_sentence in split_sentences:
+                first.append(split_sentence)
+        # sorted_first = sorted(first, key=len, reverse=True)
+        for sf in first:
+            if str(sf).count(' ')>=2:
+                f2.write(sf)
+                f2.write("\n")
     f.close()
     f2.close()
