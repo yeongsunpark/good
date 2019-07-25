@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Created by YeongsunPark at 2019-06-28
+# 전처리
 import sys, os
 import json
 import re
