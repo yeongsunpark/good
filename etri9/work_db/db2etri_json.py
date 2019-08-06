@@ -47,24 +47,6 @@ class SquadDb(SquadDbSuper):
                             "WHERE d_id='{}'".format(context[0])
             self.cur.execute(fetch_sql_qa)
 
-            for row in self.cur.fetchall():
-                self.start_id +=1
-                q_id = self.start_id
-                """
-                qas_dict = {'id': q_id, 'question':row[0], 'question_level':row[4], 'question_en': '',
-                            'question_tagged':'', 'questionType':'', 'questionFocus':'',
-                            'questionSAT':'', 'questionLAT':'', 'lawName':'', 'answers':list()}
-                """
-                qas_dict = {'id': q_id, 'question':row[0], 'question_level':row[4], 'question_en': '',
-                            'question_tagged':'', 'questionType':'', 'questionFocus':'',
-                            'questionSAT':'', 'questionLAT':'', 'answers':list()}
-                qas_list.append(qas_dict)
-
-                qas_dict['answers'].append(
-                    {'text': row[3], 'answer_start': row[1], 'answer_end': row[2],
-                     'text_en': '', 'text_tagged': '', 'text_syn': ''})
-
-
             public_date = context[3]
             article_content = context[8]
             statute_code = context[1]
@@ -75,27 +57,33 @@ class SquadDb(SquadDbSuper):
             belong_no = context[4]
             law_name = context[2]
             law_written_in_q = context[9]  # 0724추가
-            """
-            data_dict = dict()
-            data_dict['qas'] = list()
-            data_dict['qas'] = qas_list
 
-            data_dict['context_id'] = document_id
+            for row in self.cur.fetchall():
+                self.start_id +=1
+                q_id = self.start_id
+                """
+                qas_dict = {'id': q_id, 'question':row[0], 'question_level':row[4], 'question_en': '',
+                            'question_tagged':'', 'questionType':'', 'questionFocus':'',
+                            'questionSAT':'', 'questionLAT':'', 'lawName':'', 'answers':list()}
+                """
+                qas_dict = {'id': q_id, 'question':row[0], 'question_level':row[4], 'question_en': '',
+                            'question_tagged':'', 'questionType':'', 'questionFocus':'',
+                            'questionSAT':'', 'questionLAT':'', 'lawName':law_written_in_q, 'answers':list()}
+                qas_list.append(qas_dict)
 
-            data_dict['context'] = article_content
-            data_dict['context_en'] = ""
-            data_dict['context_tagged'] = ""
-            data_dict['law_written_in_q'] = law_written_in_q
-            """
-            data_dict = {'qas': qas_list, 'context_id':document_id, 'context': article_content, 'context_en': '', 'context_tagged':'',
-                         'law_written_in_q':law_written_in_q}
+                qas_dict['answers'].append(
+                    {'text': row[3], 'answer_start': row[1], 'answer_end': row[2],
+                     'text_en': '', 'text_tagged': '', 'text_syn': ''})
+
+
+            data_dict = {'qas': qas_list, 'context_id':document_id, 'context': article_content, 'context_en': '', 'context_tagged':''}
 
             pre_result['paragraphs'].append(data_dict)
             pre_result['title'] = law_name
 
             result['data'].append(pre_result)
 
-        f2 = open(os.path.join(self.output_dir, "re_law.json"), "w", encoding='utf-8')
+        f2 = open(os.path.join(self.output_dir, "law_20190806.json"), "w", encoding='utf-8')
         json.dump(result, f2, ensure_ascii=False, indent=2)
 
 if __name__ == "__main__":
