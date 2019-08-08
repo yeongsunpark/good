@@ -34,8 +34,15 @@ class SquadDb(SquadDbSuper):
         except:
             print("no select_data")
 
+    def replace_data(self):
+        try:
+            update_sql = "UPDATE hana_all_context SET title = replace(title, '법명', '') WHERE title LIKE '법명%'"
+            self.cur.execute(update_sql)
+            self.con.commit()
+        except:
+            print("no select_data")
 
 if __name__ == "__main__":
      j = SquadDb()
      j.connect_db2()
-     j.update_data()
+     j.replace_data()
