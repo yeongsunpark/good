@@ -319,6 +319,7 @@ class NLPAnalyzer:
             abc = re.compile(r"\[.\]")
             line = abc.sub("", line)
             content = line
+            # content = line.split("\t")[1]
             morph_content = nlp_analyze.get_tree_result(content)
             first = list()
             for mc in morph_content:
@@ -347,8 +348,8 @@ class NLPAnalyzer:
 
 if __name__ == "__main__":
     nlp_analyze = NLPAnalyzer()
-    f = open("/home/msl/ys/cute/data/morp/건축학개론_split.txt", "r")
-    f2 = open("/home/msl/ys/cute/data/morp/건축학개론_split_result.txt", "w")
+    f = open("/home/msl/ys/cute/data/mid_morph/nlp3다시돌려야함.txt", "r")
+    f2 = open("/home/msl/ys/cute/data/mid_morph/nlp3다시돌려야함_result.txt", "w")
     typ = "nlp"
     # typ = "split_sentence"
     if typ == "nlp":

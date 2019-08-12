@@ -8,12 +8,14 @@ sys.path.append(os.path.abspath('..'))
 class SquadDb(SquadDbSuper):
     def __init__(self):
         super(SquadDb, self).__init__()  # pull_module.SquadDbSuper 의 __init__ (self) 아래 속성 가져옴.
+        self.input_dir = "/home/msl/ys/cute/data/re_law/파일럿과1차"
 
     def connect_db2(self):
         cfg_dict = self.connect_db()  # cfg_dict = pull_module.SquadDb.connect_db(self)
         self.cur = self.easy_mysql(cfg_dict)  # self.cur = pull_module.SquadDb.easy_mysql(self, cfg_dict)
 
     def select_data(self):
+
         f = open("/home/msl/ys/cute/nia/sw_new.txt" ,"w")
         result = []
         try:
