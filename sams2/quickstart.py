@@ -16,7 +16,7 @@ try:
     import argparse
     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 except ImportError:
-    flags = None 
+    flags = None
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/sheets.googleapis.com-python-quickstart.json
@@ -54,7 +54,7 @@ def get_credentials():
         print('Storing credentials to ' + credential_path)
     return credentials
 
-def main():
+def main(rangeName):
     """Shows basic usage of the Sheets API.
 
     Creates a Sheets API service object and prints the names and majors of
@@ -71,7 +71,7 @@ def main():
     # spreadsheetId = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms'
     spreadsheetId = '1jl1_eX2e4ce7Wx81eEM4rf5u2E1QS9PC8ESNyNjI340'
     # rangeName = 'Class Data!A2:E'
-    rangeName = '16_김혜윤!A2:E3'
+    # rangeName = '19_박원아(8/5~)!A2:I3'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
     values = result.get('values', [])
@@ -79,11 +79,11 @@ def main():
     if not values:
         print('No data found.')
     else:
-        print('Name, Major:')
-        for row in values:
+        # print('Name, Major:')
+        # for row in values:
             # Print columns A and E, which correspond to indices 0 and 4.
-            print('%s, %s' % (row[0], row[1]))
-
+            # print('%s, %s' % (row[0], row[1]))
+        return values
 
 if __name__ == '__main__':
     main()

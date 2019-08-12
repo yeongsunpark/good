@@ -10,14 +10,20 @@ import ys_logger
 logger = logging.getLogger('root')
 
 # 마커가 다섯개인지 아닌지 확인.
-def marker_checker(ind, context):
+def marker_checker(ind, q_id, context, answer):
     open_mark = context.count("[")
     close_mark = context.count("]")
     if open_mark == 5 and close_mark == 5:
         logger.debug("Line%s", ind)
+    elif open_mark == 0 and close_mark == 0 and answer == "":  # 답 없는 질문
+        logger.debug("Line%s is No Answer Type", ind)
     else:
-        logger.error("Line:%s, open_marker:%s, close_marker:%s", ind, open_mark, close_mark)
-        exit()
+        if open_mark >= 6 and close_mark >=6:
+            if context.find("[[[[[") and context.find("]]]]]"):
+                pass
+            else:
+                logger.error("Line:%s, q_id:%s, open_marker:%s, close_marker:%s", ind, q_id, open_mark, close_mark)
+                exit()
 
 if __name__ == '__main__':
     marker_checker("1", "본문")
