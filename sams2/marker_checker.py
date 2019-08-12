@@ -22,9 +22,5 @@ def marker_checker(ind, context):
 if __name__ == '__main__':
     marker_checker("1", "본문")
     logger.setLevel("DEBUG") # INFO
-<<<<<<< HEAD
     logger.addHandler(ys_logger.MyHandler())
-=======
-    logger.addHandler(marker_checker.MyHandler())
->>>>>>> e129c5421c680bbe969fa93bc2859a4829996559
     logger.info("All finished")
