@@ -16,7 +16,7 @@ from quickstart import main as quick
 logger = logging.getLogger('root')
 logger.setLevel("INFO") # INFO
 logger.addHandler(ys_logger.MyHandler())
-logger.info("All finished")
+logger.info("Logger Setting Finished")
 
 
 class check():
@@ -55,12 +55,12 @@ class check():
                 logger.error("Check len item %s" % len(item))
                 break
             marker_checker(ind, q_id, context, answer)  # 마커 개수 확인
-            three_checker(ind, q_id, classify, mod_question, mod_answer, mod_context)  # 분류와 체커 확인
+            three_checker(ind, q_id, classify, context, question, answer, mod_question, mod_answer, mod_context)  # 분류와 체커 확인
             comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer, mod_context, remarks)  # 원본과 비교
 
 
 if __name__ == '__main__':
     c = check()
-    sheet = "20_김혜성(8/5~)"
-    range_name = "A213:k1501"
+    sheet = "17_장윤지"
+    range_name = "A628:k1501" # From A2
     c.main(sheet, range_name)
