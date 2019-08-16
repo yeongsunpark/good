@@ -28,7 +28,7 @@ def three_checker(ind, q_id, classify, context, question, answer, mod_question, 
         if mod_question == "" and mod_answer == "" and mod_context == "":
             logger.debug("Line%s, q_id:%s", ind, q_id)
         else:
-            logger.error("There Is A Checker At Line%s, q_id:%s, mod_question:%s, mod_answer:%s, mod_context:%s", ind, q_id, mod_question, mod_answer, mod_context)
+            logger.error("Delete Checker At Line%s, q_id:%s, mod_question:%s, mod_answer:%s, mod_context:%s", ind, q_id, mod_question, mod_answer, mod_context)
             ori = find_ori(q_id)  # return Q, A, C
             if mod_question != "":
                 logger.error("question1:%s", question)
@@ -46,7 +46,7 @@ def three_checker(ind, q_id, classify, context, question, answer, mod_question, 
         if mod_question != "" or mod_answer != "" or mod_context != "":
             logger.debug("Line%s q_id:%s", ind, q_id)
         else:
-            logger.error("No Checker At Line%s, q_id:%s, class:%s, m_q:%s, m_a:%s, m_c:%s", ind, q_id, classify, mod_question, mod_answer, mod_context)
+            logger.error("Need Checker At Line%s, q_id:%s, class:%s, m_q:%s, m_a:%s, m_c:%s", ind, q_id, classify, mod_question, mod_answer, mod_context)
             ori = find_ori(q_id)
             logger.error("question1:%s", question)
             logger.error("question2:%s", ori[0])
