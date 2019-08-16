@@ -3,13 +3,17 @@
 
 # Created by YeongsunPark at 2019-08-08
 
-import os, sys
+import os
+import sys
+import argparse
 import logging
 sys.path.insert(0,'..')
+
 import ys_logger
 from marker_checker import marker_checker
 from three_checker import three_checker
 from comp_with_ori import comp_with_ori
+
 from quickstart import main as quick
 
 # log
@@ -60,7 +64,19 @@ class check():
 
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--sheet_name', type=str, default=None)
+    parser.add_argument('-r', '--range_name', type=str, default=None)
+    args = parser.parse_args()
+
+
+    if not args.sheet_name and not args.range_name:
+        sheet = args.sheet_name
+        range_name = args.range_name
+    else:
+        sheet = "15_성은교"
+        range_name = "A596:k1501"  # From A2
+
     c = check()
-    sheet = "17_장윤지"
-    range_name = "A628:k1501" # From A2
     c.main(sheet, range_name)
