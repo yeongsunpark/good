@@ -15,8 +15,22 @@ from oauth2client.file import Storage
 try:
     import argparse
     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+    print (flags)
+    parser = argparse.ArgumentParser()
+    print (parser)
+    parser = argparse.ArgumentParser("X")
+    print (parser)
+    parser = argparse.ArgumentParser("Y")
+    print (parser)
+    args = parser.parse_args()
+    print (args)
+    print (flags)
+    print (type(flags))
+
 except ImportError:
     flags = None
+
+# flags = Namespace(auth_host_name='localhost', auth_host_port=[8080, 8090], logging_level='ERROR', noauth_local_webserver=False)
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/sheets.googleapis.com-python-quickstart.json
