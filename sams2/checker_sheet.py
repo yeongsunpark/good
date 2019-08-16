@@ -71,7 +71,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
 
-    if not args.sheet_name and not args.range_name:
+    if args.sheet_name != None:
         sheet = args.sheet_name
         range_name = args.range_name
     else:
