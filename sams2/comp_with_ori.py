@@ -108,7 +108,7 @@ def find_ori(q_id):
 
 if __name__ == '__main__':
     # comp_with_ori("1", "entity_500_gen_0", "본문", "질문", "답", "", "", "", "")
-    print (find_ori("entity_500_gen_30746"))
+    print (find_ori("entity_500_gen_19988"))
     logger.setLevel("DEBUG") # INFO
     logger.addHandler(ys_logger.MyHandler())
     logger.info("All finished")

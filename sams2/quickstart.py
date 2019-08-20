@@ -16,17 +16,10 @@ from oauth2client.file import Storage
 try:
     import argparse
     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-    print (flags)
     parser = argparse.ArgumentParser()
-    print (parser)
     parser = argparse.ArgumentParser("X")
-    print (parser)
     parser = argparse.ArgumentParser("Y")
-    print (parser)
     args = parser.parse_args()
-    print (args)
-    print (flags)
-    print (type(flags))
 
 except ImportError:
     flags = None
@@ -99,6 +92,7 @@ def main(rangeName):
             # Print columns A and E, which correspond to indices 0 and 4.
             # print('%s, %s' % (row[0], row[1]))
         return values
+
 
 if __name__ == '__main__':
     main()
