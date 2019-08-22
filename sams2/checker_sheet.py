@@ -47,7 +47,7 @@ class check():
             item = line
             if len(item) == 11:
                 q_id = item[0]
-                context = item[1]
+                context_ori = item[1]
                 question = item[2]
                 answer = item[3]
                 classify = item[4]
@@ -58,9 +58,11 @@ class check():
             else:
                 logger.error("Check len item %s" % len(item))
                 break
-            marker_checker(ind, q_id, context, answer)  # 마커 개수 확인
-            three_checker(ind, q_id, classify, context, question, answer, mod_question, mod_answer, mod_context)  # 분류와 체커 확인
-            comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer, mod_context, remarks)  # 원본과 비교
+            marker_checker(ind, q_id, context_ori, answer)  # 마커 개수 확인
+            three_checker(ind, q_id, classify, context_ori, question, answer, mod_question, mod_answer, mod_context)  # 분류와 체커 확인
+            comp_with_ori(ind, q_id, context_ori, question, answer, mod_question, mod_answer, mod_context, remarks)  # 원본과 비교
+            if ind / 10 == 0:
+                logger.error("Finished %s"%q_id)
 
 
 if __name__ == '__main__':
@@ -75,8 +77,8 @@ if __name__ == '__main__':
         sheet = args.sheet_name
         range_name = args.range_name
     else:
-        sheet = "14_최명희"
-        range_name = "A1231:k1501"  # From A2
+        sheet = "19_박원아(8/5~)"
+        range_name = "A36:k1501"  # From A2
 
     c = check()
     c.main(sheet, range_name)

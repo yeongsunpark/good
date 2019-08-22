@@ -10,7 +10,7 @@ import ys_logger
 from comp_with_ori import find_ori
 logger = logging.getLogger('root')
 
-def three_checker(ind, q_id, classify, context, question, answer, mod_question, mod_answer, mod_context):
+def three_checker(ind, q_id, classify, context_ori, question, answer, mod_question, mod_answer, mod_context):
     # 숫자가 아닌 게 들어 왔는지 확인 (문자, 공백 등)
     try:
         classify = int(classify)
@@ -37,8 +37,8 @@ def three_checker(ind, q_id, classify, context, question, answer, mod_question, 
                 logger.error("answer1:%s", answer)
                 logger.error("answer2:%s", ori[1])
             else:
-                logger.error("context1:%s", context)
-                logger.error("context2:%s", ori[2])
+                logger.error("context_ori1:%s", context_ori)
+                logger.error("context_ori2:%s", ori[2])
             exit()
 
     # 분류 1번 아닌데 체커 안 했을 경우 확인
@@ -52,8 +52,8 @@ def three_checker(ind, q_id, classify, context, question, answer, mod_question, 
             logger.error("question2:%s", ori[0])
             logger.error("answer1:%s", answer)
             logger.error("answer2:%s", ori[1])
-            logger.error("context1:%s", context)
-            logger.error("context2:%s", ori[2])
+            logger.error("context_ori1:%s", context_ori)
+            logger.error("context_ori2:%s", ori[2])
             exit()
 
 if __name__ == '__main__':

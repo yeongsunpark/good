@@ -77,7 +77,7 @@ def main(rangeName):
                               discoveryServiceUrl=discoveryUrl)
 
     # spreadsheetId = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms'
-    spreadsheetId = '1jl1_eX2e4ce7Wx81eEM4rf5u2E1QS9PC8ESNyNjI340'
+    spreadsheetId = '1HHFHiwo-EJSkabenYb1jw6YVGNjz7WgOfgZjNLoW7jI'
     # rangeName = 'Class Data!A2:E'
     # rangeName = '19_박원아(8/5~)!A2:I3'
     result = service.spreadsheets().values().get(
@@ -95,4 +95,4 @@ def main(rangeName):
 
 
 if __name__ == '__main__':
-    main()
+    main("시트1!A2:K3")

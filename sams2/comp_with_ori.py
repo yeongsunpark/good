@@ -5,6 +5,7 @@
 
 import os, sys
 import logging
+import argparse
 sys.path.insert(0,'..')
 import ys_logger
 logger = logging.getLogger('root')
@@ -29,6 +30,9 @@ def comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer
                 context_ori2 = context2.replace("[","").replace("]","")
                 context = context_ori1.replace(" ","")
                 context2 = context_ori2.replace(" ","")
+
+                # 답변에서 작은 따옴표 지움
+                answer2 = answer2.replace("'", " ")
 
                 # 본문/질문/답 (편의를 위해 eval 사용했고 가독성 떨어짐...)
                 for kind in ["context", "question", "answer"]:
@@ -108,7 +112,17 @@ def find_ori(q_id):
 
 if __name__ == '__main__':
     # comp_with_ori("1", "entity_500_gen_0", "본문", "질문", "답", "", "", "", "")
-    print (find_ori("entity_500_gen_19988"))
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-q', '--qq_id', type=str, default=None)
+    args = parser.parse_args()
+    if args.qq_id:
+        q, a, c = find_ori(args.qq_id)
+        print ("context: %s"%c)
+        print ("question: %s"%q)
+        print ("answer: %s"%a)
+    else:
+        logger.error("Write q_id ((ex)) python3 comp_with_ori.py --q entity_500_gen_27674")
     logger.setLevel("DEBUG") # INFO
     logger.addHandler(ys_logger.MyHandler())
     logger.info("All finished")

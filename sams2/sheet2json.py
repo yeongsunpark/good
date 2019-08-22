@@ -31,7 +31,7 @@ class check():
             item = line
             if len(item) == 11:
                 q_id = item[0]
-                context = item[1]
+                context_ori = item[1]
                 question = item[2]
                 answer = item[3]
                 classify = item[4]
@@ -58,7 +58,7 @@ class check():
                              'answers':list()}
             question_dict['answers'].append(answer_dict)
             # context 부분
-            context_dict = {'context':"Null", 'context_fixed':mod_context, 'context_with_answer':context, "qas":list()}
+            context_dict = {'context':"Null", 'context_fixed':mod_context, 'context_with_answer':context_ori, "qas":list()}
             context_dict['qas'].append(question_dict)
             # 최종
             para_dict = {'paragraphs':list()}
