@@ -31,6 +31,10 @@ def comp_with_ori_json(q_id, source1, source_link1):
                                     return confidence
         if not flag:
             logger.error("1_id: %s, 찾을 수 없음"%q_id)
+            logger.error("source1: %s"%source1)
+            logger.error("source2: %s" %source)
+            logger.error("source_link1: %s"%source_link1)
+            logger.error("source_link2: %s" % source_link)
             exit()
 
 if __name__ == '__main__':
