@@ -44,6 +44,17 @@ def comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer
                             if kind == "context":
                                 logger.error("%s1: %s" % (kind, context_ori1))
                                 logger.error("%s2: %s" % (kind, context_ori2))
+
+                                i = 0
+                                for aa, bb in zip(context_ori1, context_ori2):
+                                    if aa == bb:
+                                        i += 1
+                                        continue
+                                    else:
+                                        print(context_ori1[i:])
+                                        print(context_ori2[i:])
+                                        break
+
                             else:
                                 logger.error("%s1: %s" % (kind, eval(kind)))
                                 logger.error("%s2: %s" % (kind, eval("%s2" % kind)))

@@ -48,12 +48,25 @@ def three_checker(ind, q_id, classify, context_ori, question, answer, mod_questi
         else:
             logger.error("Need Checker At Line%s, q_id:%s, class:%s, m_q:%s, m_a:%s, m_c:%s", ind, q_id, classify, mod_question, mod_answer, mod_context)
             ori = find_ori(q_id)
-            logger.error("question1:%s", question)
-            logger.error("question2:%s", ori[0])
-            logger.error("answer1:%s", answer)
-            logger.error("answer2:%s", ori[1])
-            logger.error("context_ori1:%s", context_ori)
-            logger.error("context_ori2:%s", ori[2])
+            if question != ori[0]:
+                logger.error("question1:%s", question)
+                logger.error("question2:%s", ori[0])
+            if answer != ori[1]:
+                logger.error("answer1:%s", answer)
+                logger.error("answer2:%s", ori[1])
+            if context_ori != ori[2]:
+                logger.error("context_ori1:%s", context_ori)
+                logger.error("context_ori2:%s", ori[2])
+                i = 0
+                for aa, bb in zip (context_ori, ori[2]):
+                    if aa == bb:
+                        i +=1
+                        continue
+                    else:
+                        print ("본문이 아래와 같이 다름.\n")
+                        print (context_ori[i:])
+                        print ("\n")
+                        print (ori[2][i:])
             exit()
 
 if __name__ == '__main__':
