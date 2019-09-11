@@ -10,7 +10,7 @@ import logging
 
 class json_merge():
     def __init__(self):
-        self.input_dir = "/home/msl/ys/cute/data/wiki_0902/result"
+        self.input_dir = "/home/msl/ys/cute/data/wiki_0902/result_SR"
         self.output_dir = "/home/msl/ys/cute/data/wiki_0902/json"
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
@@ -85,4 +85,5 @@ class json_merge():
 
 if __name__ == "__main__":
     c = json_merge()
+    c.main()
     c.main()
