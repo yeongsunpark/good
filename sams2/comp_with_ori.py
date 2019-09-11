@@ -68,7 +68,7 @@ def comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer
                             logger.error("%s1:%s" % (kind, eval(kind)))
                             logger.error("%s2:%s" % (kind, eval("%s2" % kind)))
                             exit()
-                
+
                 """
                 # 본문
                 context = context.replace("[[[[[","").replace("]]]]]","")

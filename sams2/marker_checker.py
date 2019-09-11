@@ -22,11 +22,11 @@ def marker_checker(ind, q_id, context_ori, answer):
         if context_ori.count("[[[[[") == 1 or context_ori.count("]]]]]") == 1:  # 마커가 다섯개 씩 있다면 오류.
             logger.error("Delete All Markers At Line%s, q_id:%s is No Answer Type", ind, q_id)
             exit()
-    else:  # 마커가 여섯개 이상 주르륵이면 오류.
-        p = re.compile('(\[{5,}.*\]{6,})|(\[{6,}.*\]{5,})')
-        if p.search(context_ori):
-            logger.error("Only Need Five Markers Line%s, q_id:%s, open_marker:%s, close_marker:%s", ind, q_id, open_mark, close_mark)
-            exit()
+    # else:  # 마커가 여섯개 이상 주르륵이면 오류.
+        # p = re.compile('(\[{5,}.*\]{6,})|(\[{6,}.*\]{5,})')
+        # if p.search(context_ori):
+            # logger.error("Only Need Five Markers Line%s, q_id:%s, open_marker:%s, close_marker:%s", ind, q_id, open_mark, close_mark)
+            # exit()
 
 if __name__ == '__main__':
     marker_checker("1", "본문")

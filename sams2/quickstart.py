@@ -77,7 +77,7 @@ def main(rangeName):
                               discoveryServiceUrl=discoveryUrl)
 
     # spreadsheetId = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms'
-    spreadsheetId = '1DEviXullZ-bVrV_wBy8CvJ6joN2lv4D9xlETsIbqeoU'
+    spreadsheetId = '1LZ5Dyrxihzqow3wFQpaymoGsNyp4eOxAc--p9hqVXws'
     # rangeName = 'Class Data!A2:E'
     # rangeName = '19_박원아(8/5~)!A2:I3'
     result = service.spreadsheets().values().get(
