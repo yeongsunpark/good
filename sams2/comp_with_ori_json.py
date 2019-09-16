@@ -14,7 +14,7 @@ logger = logging.getLogger('root')
 def comp_with_ori_json(q_id, source1, source_link1):
     # 원본 가져오기
     flag = False
-    with open("/home/msl/ys/cute/data/sams2/entity_200_all_v2.json", "r") as f2:
+    with open("/home/msl/ys/cute/data/sams2/save/entity_and_random_question.json", "r") as f2:
         json_data1 = json.load(f2)
         for data in json_data1["data"]:
             for para in data["paragraphs"]:
@@ -25,10 +25,12 @@ def comp_with_ori_json(q_id, source1, source_link1):
                         source = ans["source"]
                         source_link = ans["source_link"]
                         if id == q_id and source1 == source and source_link1 == source_link:
-                            flag = True
-                            for ans in qas["answers"]:
-                                if confidence and source and source_link:
-                                    return confidence
+                            return confidence
+                            # flag = True
+                            # for ans in qas["answers"]:
+                                # if confidence and source and source_link:
+                                    # return confidence
+
         if not flag:
             logger.error("1_id: %s, 찾을 수 없음"%q_id)
             logger.error("source1: %s"%source1)

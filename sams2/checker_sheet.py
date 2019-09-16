@@ -77,8 +77,8 @@ if __name__ == '__main__':
         sheet = args.sheet_name
         range_name = args.range_name
     else:
-        sheet = "19_박원아(8/5~)"
-        range_name = "A36:k1501"  # From A2
+        sheet = "시트1"
+        range_name = "A513:k"  # From A2
 
     c = check()
     c.main(sheet, range_name)

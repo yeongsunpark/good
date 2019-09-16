@@ -32,4 +32,4 @@ def make_clean_context(q_id, context_ori, answer):
         exit()
 
 if __name__ == '__main__':
-    print(make_clean_context("11", "나는 안녕라고 [[[[[말]]]]]함", "말"))
+    print(make_clean_context("11", "나는 안녕라고 [[[[[[[말]]]]]]]함", "말"))
