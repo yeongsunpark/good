@@ -40,4 +40,4 @@ def comp_with_ori_json(q_id, source1, source_link1):
             exit()
 
 if __name__ == '__main__':
-    print(comp_with_ori_json("entity_500_gen_8002", "[Wiki] 로버트 W. 펑크", "https://ko.wikipedia.org/wiki?curid=2280224"))
+    print(comp_with_ori_json("entity_500_gen_26837", "[Wiki] 박지윤 (방송인)", "https://ko.wikipedia.org/wiki?curid=84073"))

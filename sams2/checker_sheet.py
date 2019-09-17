@@ -7,7 +7,7 @@ import os
 import sys
 import argparse
 import logging
-sys.path.insert(0,'..')
+# sys.path.insert(0,'..')
 
 import ys_logger
 from marker_checker import marker_checker
@@ -78,7 +78,8 @@ if __name__ == '__main__':
         range_name = args.range_name
     else:
         sheet = "시트1"
-        range_name = "A513:k"  # From A2
+        # range_name = "A2:k"  # From A2
+        range_name = "A2971:k"  # From A2
 
     c = check()
     c.main(sheet, range_name)

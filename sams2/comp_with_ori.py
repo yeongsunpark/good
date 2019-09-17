@@ -13,8 +13,8 @@ logger = logging.getLogger('root')
 def comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer, mod_context, remarks):
     # 원본 가져오기
     flag = False
-    with open ("/home/msl/ys/cute/data/sams2/entity_200_all_v2.txt", "r") as f2:
-    # with open ("/home/msl/ys/cute/data/sams2/random_questions_from_m4_5_to_6.txt", "r") as f2:
+    # with open ("/home/msl/ys/cute/data/sams2/entity_200_all_v2.txt", "r") as f2:
+    with open ("/home/msl/ys/cute/data/sams2/random_questions_from_m4_5_to_6.txt", "r") as f2:
         for line2 in f2:
             item2 = line2.strip().split("\t")
             q_id2 = item2[0]
@@ -61,7 +61,7 @@ def comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer
                                 logger.error("%s1: %s" % (kind, eval(kind)))
                                 logger.error("%s2: %s" % (kind, eval("%s2" % kind)))
 
-                            exit()
+                            # exit()
 
                     else:  # 본문/질문/답이 수정되지 않았는데
                         if eval("mod_%s" % kind) !="":  # 체커가 되어 있다면
@@ -69,7 +69,7 @@ def comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer
                             logger.error("q_id: %s" % q_id)
                             logger.error("%s1:%s" % (kind, eval(kind)))
                             logger.error("%s2:%s" % (kind, eval("%s2" % kind)))
-                            exit()
+                            # exit()
 
         if not flag:
             # q_id 가 원본에 없는 경우.
@@ -79,8 +79,8 @@ def comp_with_ori(ind, q_id, context, question, answer, mod_question, mod_answer
 def find_ori(q_id):
     # 원본 가져오기
     flag = False
-    with open ("/home/msl/ys/cute/data/sams2/entity_200_all_v2.txt", "r") as f2:
-    # with open("/home/msl/ys/cute/data/sams2/random_questions_from_m4_5_to_6.txt", "r") as f2:
+    # with open ("/home/msl/ys/cute/data/sams2/entity_200_all_v2.txt", "r") as f2:
+    with open("/home/msl/ys/cute/data/sams2/random_questions_from_m4_5_to_6.txt", "r") as f2:
         for line2 in f2:
             item2 = line2.strip().split("\t")
             q_id2 = item2[0]
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     if args.qq_id:
         q, a, c = find_ori(args.qq_id)
     else:
-        qq_id = "random_questions_54083"
+        qq_id = "random_questions_66538"
         q, a, c = find_ori(qq_id)
     print ("context: %s"%c)
     print ("question: %s"%q)

@@ -18,10 +18,11 @@ def comp_with_ori_json(q_id, source1, source_link1):
         for line in f2:
             item = line.split("\t")
             id = item[0]
-            source = item[4]
-            source_link = item[5]
+            # source = item[4]
+            # source_link = item[5]
             confidence = float(item[6].replace("\n",""))
-            if q_id == id and source1 == source and source_link1 == source_link:
+            # if q_id == id and source1 == source and source_link1 == source_link:
+            if q_id == id:
                 return confidence
 
         if not flag:
@@ -30,7 +31,8 @@ def comp_with_ori_json(q_id, source1, source_link1):
             logger.error("source2: %s" %source)
             logger.error("source_link1: %s"%source_link1)
             logger.error("source_link2: %s" % source_link)
-            exit()
+            return 940711940711
+            # exit()
 
 if __name__ == '__main__':
     print(comp_with_ori_json("entity_500_gen_8002", "[Wiki] 로버트 W. 펑크", "https://ko.wikipedia.org/wiki?curid=2280224"))

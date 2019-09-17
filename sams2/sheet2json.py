@@ -23,14 +23,13 @@ logger.info("Logger Setting Finished")
 
 class check():
     def __init__(self):
-        self.version = "number1"
+        self.version = "number7"
 
     def main(self, sheet, range_name):
         result = {'version': self.version, 'data': list()}  # 여기에 빼줘야 계속 누적 되어 적힘.
         # f = quick('19_박원아(8/5~)!A1:k3')
         f = quick(sheet+'!'+range_name)
         # for ind, line in enumerate(f):
-        logger.info("before line")
         for line in f:
             item = line
             if len(item) == 11:
@@ -49,17 +48,14 @@ class check():
             else:
                 logger.error("Check len item %s" % len(item))
                 break
-            logger.info("after line")
             conf = comp_with_ori_json(q_id, source, source_link)  # 원본과 비교 후 confidence 가져옴.
-            logger.info("conf")
-            if answer == "":
+            if answer == "" or answer == "#VALUE!":  # 답 없는 질문
                 fin_context = context_ori
                 answer_start = None
             # 마커 없는 본문 만들기 (context)
             # 마커 없는 본문에서 정답의 시작 위치 찾기 <- 꼭 확인 해보기. (answer_start)
             else:
                 fin_context, answer_start = make_clean_context(q_id, context_ori, answer)
-            logger.info("answer")
             # 질문 수정, 정답 수정, 본문 수정 별로 확인하고 True return 하기.
             if mod_answer != "":
                 mod_answer_value = True
@@ -73,7 +69,6 @@ class check():
                 mod_context_value = True
             else:
                 mod_context_value = False
-            logger.info("tftf")
 
             # answer 부분
             answer_dict = {'text':answer, 'text_fixed':mod_answer_value, 'answer_start':answer_start, 'answer_start_fixed':mod_answer_value,
@@ -89,10 +84,10 @@ class check():
             para_dict = {'paragraphs':list()}
             para_dict['paragraphs'].append(context_dict)
             result['data'].append(para_dict)
-            logger.info("final")
 
         with open("/home/msl/ys/cute/data/sams2/{}.json".format(self.version), "w") as f2:
             json.dump(result, f2, ensure_ascii=False, indent=2)
+            logger.info("finish")
 
 
 
@@ -109,7 +104,7 @@ if __name__ == '__main__':
         range_name = args.range_name
     else:
         sheet = "시트1"
-        range_name = "A2:k5"  # From A2
+        range_name = "A2:k7996"  # From A2
 
     c = check()
     c.main(sheet, range_name)

@@ -14,4 +14,4 @@ class MyHandler(logging.StreamHandler):
         fmt_date = '%Y-%m-%d_%T %Z'
         formatter = logging.Formatter(fmt, fmt_date)
         self.setFormatter(formatter)
-        # logging.basicConfig(filename='/home/msl/ys/good/sams1/output2.log', level=logging.ERROR)
+        logging.basicConfig(filename='/home/msl/ys/good/sams1/output2.log', level=logging.ERROR)
