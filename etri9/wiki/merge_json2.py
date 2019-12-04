@@ -10,8 +10,8 @@ import logging
 
 class json_merge():
     def __init__(self):
-        self.input_dir = "/home/msl/ys/cute/data/wiki_0902/result_SR"
-        self.output_dir = "/home/msl/ys/cute/data/wiki_0902/json"
+        self.input_dir = "/home/msl/ys/cute/data/wiki_1203/check"
+        self.output_dir = "/home/msl/ys/cute/data/wiki_1203/json"
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
         self.start_qid = 19000000
@@ -21,7 +21,7 @@ class json_merge():
 
     def merge(self):
         result = dict()
-        result['version'] = 1
+        result['version'] = 3
         result['creator'] = "MINDs Lab."
         result['data'] = list()
         for f1 in os.listdir(self.input_dir):
@@ -70,9 +70,11 @@ class json_merge():
                             'answers_all':list(),
                              'paragraphs':list()}
                 qas_list.append(qas_dict2)
+                qas_dict2['question_text_syn'].append(question1)
                 qas_dict2['answers_all'].append(text)
 
-                qas_dict2['paragraphs'].append({'id':"p"+str(p_id), 'title':doc['title'], 'context':doc['content'],
+                # qas_dict2['paragraphs'].append({'id':"p"+str(p_id), 'title':doc['title'], 'context':doc['content'],
+                qas_dict2['paragraphs'].append({'id':doc['paragraphID'], 'title':doc['title'], 'context':doc['content'],
                                                 'answers':list()})
 
                 byte_start, byte_end = self.find_byte(doc['content'], int(answer_start), int(answer_end))
@@ -87,9 +89,10 @@ class json_merge():
                 result['data'].append(pre_result)
 
 
-            f2 = open(os.path.join(self.output_dir, "final2.json"), "w", encoding='utf-8')
+            f2 = open(os.path.join(self.output_dir, "final3.json"), "w", encoding='utf-8')
             json.dump(result, f2, ensure_ascii=False, indent=2)
 
 if __name__ == "__main__":
     c = json_merge()
+    c.merge()
     c.main()
